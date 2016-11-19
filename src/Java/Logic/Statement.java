@@ -13,31 +13,31 @@ import java.util.Set;
  */
 public class Statement {
     //TODO: реализовать выполнение выражения
-    String lefStr, rightStr;
-    Memory leftMem,rightMem;
-    Operator operator;
-
-    public Statement(String lefStr, Operator operator, Memory rightMem) {
-        this.lefStr = lefStr;
-        this.rightMem = rightMem;
-        this.operator = operator;
-        this.rightStr=null;
-        this.leftMem=null;
-    }
-    public Statement(Memory leftMem, Operator operator, Memory rightMem) {
-        this.lefStr = null;
-        this.rightMem = rightMem;
-        this.operator = operator;
-        this.rightStr=null;
-        this.leftMem=leftMem;
-    }
-    public Statement(Memory leftMem, Operator operator, String rightStr) {
-        this.lefStr = null;
-        this.rightMem = null;
-        this.operator = operator;
-        this.rightStr=rightStr;
-        this.leftMem=leftMem;
-    }
+//    String lefStr, rightStr;
+//    Memory leftMem,rightMem;
+//    Operator operator;
+//
+//    public Statement(String lefStr, Operator operator, Memory rightMem) {
+//        this.lefStr = lefStr;
+//        this.rightMem = rightMem;
+//        this.operator = operator;
+//        this.rightStr=null;
+//        this.leftMem=null;
+//    }
+//    public Statement(Memory leftMem, Operator operator, Memory rightMem) {
+//        this.lefStr = null;
+//        this.rightMem = rightMem;
+//        this.operator = operator;
+//        this.rightStr=null;
+//        this.leftMem=leftMem;
+//    }
+//    public Statement(Memory leftMem, Operator operator, String rightStr) {
+//        this.lefStr = null;
+//        this.rightMem = null;
+//        this.operator = operator;
+//        this.rightStr=rightStr;
+//        this.leftMem=leftMem;
+//    }
 
 
     /**
@@ -83,18 +83,18 @@ public class Statement {
         private Operator(char ch1, char[] ch2){
             left = ch1;
             middle = ch2;
-            right=null;
+            right=' ';
         }
         private Operator(char[] ch2, char ch3){
-            left = null;
+            left = ' ';
             middle = ch2;
             right=ch3;
 
         }
         public Operator(char[] ch2){
-            left = null;
+            left = ' ';
             middle = ch2;
-            right=null;
+            right=' ';
         }
         public String toString(){
             String answer="";
@@ -130,7 +130,7 @@ public class Statement {
         }else{
             String key=findWagon(varName, memories);
             if(key!=null){
-                memories.get(key).write(varName);
+                memories.get(key).write(value,varName);
                 return;
             }
         }
@@ -145,8 +145,7 @@ public class Statement {
                 return memories.get(key).read(varName);
             }
         }
-        System.err.println("Нет такой переменной "+varName);
-        return null;
+        return varName;
     }
     String findWagon(String varName, HashMap<String, Memory> memories){
         Set<String> keys = memories.keySet();
@@ -176,38 +175,53 @@ public class Statement {
         System.err.println("Нет такой переменной "+varName);
     }
 
-    public void doStatement(Storage storage, Tape tape){
-        //"'a'<-'b'"
-        // 'hello' /<- 'b'
-        if(this.operator.middle == "<-".toCharArray()) {
-            if (this.operator.left != null){
-                if (this.leftMem != null)
-                    this.leftMem.clear();
-                else System.err.println("Как ты собираешься константную строку удалять и записывать в нее?!!");
-            }
-            leftMem.write(this.rightMem.read(),this.rightMem)
-
-            if(this.operator.right != null)
-                if(this.rightMem != null)
-                    this.rightMem.clear();
-                else System.err.println("Как ты собираешься константную строку удалять?!!");
-        } else if(this.operator.middle == "->".toCharArray()) {
-            if(this.operator.right != null)
-                if(this.rightMem != null)
-                    this.rightMem.clear();
-                else System.err.println("Как ты собираешься константную строку удалять и записывать в нее?!!");
-        }
-    }
+//    public void doStatement(Storage storage, Tape tape){
+//       if(this.operator.middle.toString().contains("<")){
+//           if(leftMem!=null){
+//               if(this.operator.left.toString().contains("/")){
+//                   leftMem.clear();
+//               }
+//               if(rightMem!=null){
+//                   leftMem.write(rightMem.read(rightMem.getName()),leftMem.getName());
+//               }
+//           }else{
+//               System.err.println("");
+//           }
+//       }
+//    }
 
 //
-//    public Statement(String leftArg, Operator operator, String rightArg){
-//        this.leftArg=leftArg;
-//        this.operator=operator;
-//        this.rightArg=rightArg;
+    String leftArg;
+    String rightArg;
+    Operator operator;
+    public Statement(String leftArg, Operator operator, String rightArg) {
+        this.leftArg = leftArg;
+        this.operator = operator;
+        this.rightArg = rightArg;
+    }
+    public void doStatement(Storage storage, Tape tape){
+        if(String.valueOf(this.operator.middle).contains("<")){
+            if(this.operator.left=='/'){
+                clear(this.leftArg,storage.getMemories());
+            }
+            write(this.leftArg,read(this.rightArg,storage.getMemories()),storage.getMemories());
+            if(this.operator.right.equals('/')){
+                clear(this.rightArg,storage.getMemories());
+            }
+        }else if(this.operator.middle.toString().contains(">")) {
+            if(this.operator.right.equals('/')){
+                clear(rightArg,storage.getMemories());
+            }
+            write(rightArg,read(leftArg,storage.getMemories()),storage.getMemories());
+            if(this.operator.left.equals('/')){
+                clear(leftArg,storage.getMemories());
+            }
+        }
+    }
 //    }
-//    public String toString(){
-//        return leftArg.toString()+operator.toString()+rightArg.toString();
-//    }
+    public String toString(){
+        return leftArg.toString()+operator.toString()+rightArg.toString();
+    }
 //    public static void main(String[] args) {
 //        Logic.Statement statement=new Logic.Statement(new Memories.Wagon("ЛВ","ПВ",new ArrayList<String>(Arrays.asList("first,Second"))),new Operator("<-".toCharArray()),new Memories.Register(""));
 //

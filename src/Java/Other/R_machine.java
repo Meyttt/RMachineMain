@@ -64,6 +64,10 @@ public class R_machine {
                 }
                 if(endNumber == "#") {
                     System.out.println("Конец программы");
+                    Set<String> names = this.allStorage.storage.getMemories().keySet();
+                    for(String name:names){
+                        System.out.println(this.allStorage.storage.getMemories().get(name));
+                    }
                     return;
                 }
                 analyzer(endNumber);
@@ -89,6 +93,10 @@ public class R_machine {
                 }
                 if(endNumber == "#") {
                     System.out.println("Конец программы");
+                    Set<String> names = this.allStorage.storage.getMemories().keySet();
+                    for(String name:names){
+                        System.out.println(this.allStorage.storage.getMemories().get(name));
+                    }
                     return;
                 }
                 analyzer(endNumber);
@@ -101,19 +109,40 @@ public class R_machine {
 
     public static void main(String args[]) throws FileNotFoundException {
         Tape tape = new Tape("thisIsTape");
+        HashMap<String, Arm> arms= new HashMap<>();
+        HashMap<String,Memory> memories = new HashMap<>();
+        HashMap<String,Alphabet> alphabets = new HashMap<>();
         Register reg1 = new Register("reg1",null);
         Register reg2 = new Register("reg2", null);
+        Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
+        alphabets.put(alphabet.getFullname(),alphabet);
+        memories.put(reg1.getname(),reg1);
+        memories.put(reg2.getname(),reg2);
         ArrayList<ArmLine> armlines = new ArrayList<>();
         ArrayList<Statement> statements01 = new ArrayList<>();
-        statements01.add(new Statement(reg1,Statement.getOperator("<-"),"Cat"));
-        statements01.add(new Statement(reg2,Statement.getOperator("<-"),"Dog"));
-        ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
+        statements01.add(new Statement("reg1",Statement.getOperator("<-"),"Cat"));
+        statements01.add(new Statement("reg2",Statement.getOperator("<-"),"Dog"));
+        ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"#");
         armlines.add(arm01);
         ArrayList<Statement> statements02 = new ArrayList<>();
-        statements01.add(new Statement(reg1,Statement.getOperator("<-"),"Spok"));
-        statements01.add(new Statement(reg2,Statement.getOperator("<-"),"Kirk"));
-        ArmLine arm02 = new ArmLine("0",new Condition("t"),statements02,"2");
+        statements02.add(new Statement("reg1",Statement.getOperator("<-"),"Spok"));
+        statements02.add(new Statement("reg2",Statement.getOperator("<-"),"Kirk"));
+        ArmLine arm02 = new ArmLine("0",new Condition("test"),statements02,"2");
         armlines.add(arm02);
-        Arm arm1 = new Arm("0", armlines);
+        Arm arm0 = new Arm("0", armlines);
+
+
+        ArrayList<ArmLine> armlines1 = new ArrayList<>();
+        ArrayList<Statement> statements12 = new ArrayList<>();
+        statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
+        ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
+        armlines.add(arm12);
+        Arm arm1 = new Arm("1", armlines1);
+        arms.put("0",arm0);
+        arms.put("1",arm1);
+        AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
+        R_machine r_machine = new R_machine(allStorage);
+        r_machine.analyzer();
+
     }
 }

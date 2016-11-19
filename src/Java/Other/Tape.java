@@ -21,13 +21,16 @@ public class Tape {
             charsList.add(ch);
         }
         this.tape=charsList;
+        this.it = tape.iterator();
     }
+    Iterator<Character> it;
     public Tape(Queue<Character> tape) {
         this.tape = tape;
+        this.it = tape.iterator();
     }
 
 
-    Iterator<Character> it = tape.iterator();
+
     public Character read(){
         return it.next(); // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
     }

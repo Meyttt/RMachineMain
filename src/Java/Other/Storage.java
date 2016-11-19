@@ -23,9 +23,6 @@ public class Storage {
         return alphabets;
     }
 
-    public Tape getTape() {
-        return tape;
-    }
 
     /**
      * Ключ - значение номера/названия вершины
@@ -36,17 +33,16 @@ public class Storage {
      */
     HashMap<String, Memory> memories;
     HashMap<String, Alphabet> alphabets;
-    Tape tape;
 
-    public Storage(HashMap<String, Arm> arms, HashMap<String, Memory> memories, HashMap<String, Alphabet> alphabets, Tape tape) {
+    public Storage(HashMap<String, Arm> arms, HashMap<String, Memory> memories, HashMap<String, Alphabet> alphabets) {
         this.arms = arms;
         this.memories = memories;
         this.alphabets = alphabets;
-        this.tape = tape;
+        //this.tape = tape;
     }
     public void printStorage(){
         System.out.println("----STORAGE----");
-        System.out.println("TAPE: "+tape);
+        //System.out.println("TAPE: "+tape);
         System.out.println("ALPHABETS: ");
         Set<String> alphNames=alphabets.keySet();
         for(String name:alphNames){

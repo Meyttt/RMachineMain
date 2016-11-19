@@ -1,0 +1,75 @@
+	<!DOCTYPE r-pro>
+	<r-pro version="1.0">
+		<progname><!-- Имя программы --></progname>
+		<comment><!-- Условный комментарий --></comment>
+		<descriptive_part>
+			<memory_block>
+				<memory type="Register" name="reg1"/>
+				<memory type="Register" name="Register"/>
+				<memory type="Register" name="reg2"/>
+				<memory type="Counter" name="ct1"/>
+				<memory type="Counter" name="a"/>
+				<memory type="Counter" name="b"/>
+				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
+				<memory type="Table" name = "tname">
+					<columnsName>
+						<column>Name1</column>
+						<column>Name2</column>
+					</columnsName>
+				</memory>
+			</memory_block>
+			<alphabet>
+				<abc name="Letter" short_name="L" description="descr"></abc>
+			</alphabet>
+		</descriptive_part>
+		<alg>
+			<arm begin = "0">
+                <edge end = "1">
+                    <predicate type="alphabet" name = "predAlphabet"/>
+					<operation>
+						<memory name="ct1"/>
+						<operator>-&gt;</operator>
+						<memory name="reg1"/>
+					</operation>
+                </edge>
+                <edge end = "2">
+                    <predicate type="expression">
+						<memory name = "a"/>
+						<sign>&gt;</sign>
+						<memory name = "b"/>
+					</predicate>
+					<operation>
+						<memory name = "reg1"/>
+						<operator>-&gt;</operator>
+						<string value = "Hello World"/>
+					</operation>
+					<operation>
+						<memory name = "ct1"/>
+						<operator>-&gt;</operator>
+						<memory name = "reg1"/>
+					</operation>
+                </edge>
+				<edge end = "3">
+					<predicate type="String" value="perdConst"/>
+					<operation>
+						<memory name = "ct1"/>
+						<operator>-&gt;</operator>
+						<memory name = "reg1"/>
+					</operation>
+					<operation>
+						<memory name = "ct1"/>
+						<operator>-&gt;</operator>
+						<memory name = "reg1"/>
+					</operation>
+				</edge>
+				<edge end = "4">
+					<predicate type="Register" name="Register"/>
+					<operation>
+						<memory name = "ct1"/>
+						<operator>-&gt;</operator>
+						<memory name = "reg1"/>
+					</operation>
+				</edge>
+            </arm>
+		</alg>
+	</r-pro>

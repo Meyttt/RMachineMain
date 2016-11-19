@@ -1,0 +1,68 @@
+	<!DOCTYPE r-pro>
+	<r-pro version="1.0">
+		<progname><!-- Имя программы --></progname>
+		<comment><!-- Условный комментарий --></comment>
+		<descriptive_part>
+			<memory_block>
+				<memory type="Register" name="left"/>
+				<memory type="Counter" name="counter1"/>
+				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
+				<memory type="Table" name = "tname">
+					<columnsName>
+						<column>Name1</column>
+						<column>Name2</column>
+					</columnsName>
+				</memory>
+			</memory_block>
+			<alphabet>
+				<abc name="Letter" short_name="L">abcdefghijklmnopqrstuvwxyz</abc>
+			</alphabet>
+		</descriptive_part>
+		<alg>
+			<arm begin = "0">
+                <edge end = "1">
+                    <predicate>
+                        <alphabet>AlphabetName1</alphabet>
+                    </predicate>
+                    <operation left="left" operator="/-&gt;" right="right"/>
+                </edge>
+                <edge end = "2">
+                    <predicate>
+                        <predicateText>PredicateText1</predicateText>
+                    </predicate>
+                    <operation left="left" operator="&lt;-" right="right"/>
+                    <operation left="left" operator="-&gt;/" right="right"/>
+                </edge>
+				<edge end = "3">
+					<predicate>
+						<predicateText>PredicateText2</predicateText>
+					</predicate>
+					<operation left="left" operator="-&gt;" right="right"/>
+					<operation left="left" operator="/-&gt;/" right="right"/>
+				</edge>
+            </arm>
+			<arm begin = "2">
+				<!--задаем тип (1-4)-->
+				<edge end = "1">
+					<predicate>
+						<alphabet>AlphabetName1</alphabet>
+					</predicate>
+					<operation left="left" operator="/-&gt;" right="right"/>
+				</edge>
+				<edge end = "2">
+					<predicate>
+						<predicateText>PredicateText3</predicateText>
+					</predicate>
+					<operation left="left" operator="&lt;-" right="right"/>
+					<operation left="left" operator="-&gt;/" right="right"/>
+				</edge>
+				<edge end = "3">
+					<predicate>
+						<predicateText>PredicateText4</predicateText>
+					</predicate>
+					<operation left="left" operator="-&gt;" right="right"/>
+					<operation left="left" operator="/-&gt;/" right="right"/>
+				</edge>
+			</arm>
+		</alg>
+	</r-pro>

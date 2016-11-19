@@ -1,0 +1,35 @@
+	<!DOCTYPE r-pro>
+	<r-pro version="1.0">
+		<progname><!-- Имя программы --></progname>
+		<comment><!-- Условный комментарий --></comment>
+		<descriptive_part>
+			<memory_block>
+				<memory type="Register" name="reg1">Val1</memory>
+				<memory type="Counter" name="counter1">2</memory>
+				<memory type="Wagon" leftName="W1LeftName" rightName ="W1RightName">
+                    <wagCell>val1</wagCell>
+                    <wagCell>val2</wagCell>
+                    <wagCell>val3</wagCell>
+                </memory>
+				<memory type="Table" name = "tname">
+					<columnsName>
+						<column>Column1</column>
+						<column>Column2</column>
+					</columnsName>
+                    <rows>
+                        <row>
+                            <cell>row1cell1</cell>
+                            <cell>row1cell2</cell>
+                        </row>
+                        <row>
+                            <cell>row2cell1</cell>
+                            <cell>row2cell2</cell>
+                        </row>
+                    </rows>
+				</memory>
+			</memory_block>
+			<alphabet>
+				<abc name="Letter" short_name="L" description="Содержит буквы латинского алфавита"/>
+			</alphabet>
+		</descriptive_part>
+	</r-pro>

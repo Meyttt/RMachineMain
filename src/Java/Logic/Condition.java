@@ -28,6 +28,7 @@ public class Condition {
         if(this.alphabet != null) return compare(this.alphabet, tape);
         if(this.text != null) return compare(this.text, tape);
         if(this.memory != null) return compare(this.memory, tape);
+
         return false;
     }
 
@@ -52,6 +53,10 @@ public class Condition {
 //  1. Объединяем первый два пункта условий из книги в один, так как первый является подмножеством второго: проверка
 //     цепочки термов на соответствие с вимволами входной ленты.
     private boolean compare(String str, Tape tape) {
+        if(str.equals("*")){
+            aBoolean = true;
+            return aBoolean;
+        }
         for(int i = 0; i < str.length(); i++) {
             if (!(str.charAt(i) == tape.read())){
                 aBoolean = false;

@@ -27,9 +27,9 @@
                 <edge end = "1">
                     <predicate type="alphabet" name = "predAlphabet"/>
 					<operation>
-						<memory name="ct1"/>
+						<left value = "ct1"/>
 						<operator>-&gt;</operator>
-						<memory name="reg1"/>
+						<right value ="reg1"/>
 					</operation>
                 </edge>
                 <edge end = "2">
@@ -39,35 +39,35 @@
 						<memory name = "b"/>
 					</predicate>
 					<operation>
-						<memory name = "reg1"/>
+						<left value =  "reg1"/>
 						<operator>-&gt;</operator>
-						<string value = "Hello World"/>
+						<right value = "Hello World"/>
 					</operation>
 					<operation>
-						<memory name = "ct1"/>
+						<left value =  "ct1"/>
 						<operator>-&gt;</operator>
-						<memory name = "reg1"/>
+						<right value = "reg1"/>
 					</operation>
                 </edge>
 				<edge end = "3">
 					<predicate type="String" value="perdConst"/>
 					<operation>
-						<memory name = "ct1"/>
+						<left value = "ct1"/>
 						<operator>-&gt;</operator>
-						<memory name = "reg1"/>
+						<right value = "reg1"/>
 					</operation>
 					<operation>
-						<memory name = "ct1"/>
+						<left value =  "ct1"/>
 						<operator>-&gt;</operator>
-						<memory name = "reg1"/>
+						<right value = "reg1"/>
 					</operation>
 				</edge>
 				<edge end = "4">
 					<predicate type="Register" name="Register"/>
 					<operation>
-						<memory name = "ct1"/>
+						<left value = "ct1"/>
 						<operator>-&gt;</operator>
-						<memory name = "reg1"/>
+						<right value = "reg1"/>
 					</operation>
 				</edge>
             </arm>

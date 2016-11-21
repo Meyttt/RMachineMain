@@ -20,12 +20,13 @@
 			</memory_block>
 			<alphabet>
 				<abc name="Letter" short_name="L" description="descr"></abc>
+				<abc name="Letter1" short_name="L1" description="descr1"></abc>
 			</alphabet>
 		</descriptive_part>
 		<alg>
 			<arm begin = "0">
                 <edge end = "1">
-                    <predicate type="alphabet" name = "predAlphabet"/>
+                    <predicate type="alphabet" name = "Letter"/>
 					<operation>
 						<left value = "ct1"/>
 						<operator>-&gt;</operator>

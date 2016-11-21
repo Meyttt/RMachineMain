@@ -4,10 +4,7 @@ import Logic.Arm;
 import Logic.ArmLine;
 import Logic.Condition;
 import Logic.Statement;
-import Memories.Alphabet;
-import Memories.Memory;
-import Memories.Register;
-import Memories.Wagon;
+import Memories.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -116,26 +113,35 @@ public class R_machine {
 
 
     public static void main(String args[]) throws FileNotFoundException {
-        //Cоздание ленты ввода
-        Tape tape = new Tape("thisIsTape");
         HashMap<String, Arm> arms= new HashMap<>();
         HashMap<String,Memory> memories = new HashMap<>();
         HashMap<String,Alphabet> alphabets = new HashMap<>();
+
+        //Cоздание ленты ввода
+        Tape tape = new Tape("thisIsTape");
+        Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
+        alphabets.put(alphabet.getFullname(),alphabet);
+
         //Создание памятей пустыми (начальное сстояние)
         Wagon wag1 = new Wagon("LW","RW", null);
         Register reg1 = new Register("reg1",null);
         Register reg2 = new Register("reg2", null);
-        Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
-        alphabets.put(alphabet.getFullname(),alphabet);
+        Table table = new Table("table1", new ArrayList<String>());
+
+
         memories.put(reg1.getname(),reg1);
         memories.put(reg2.getname(),reg2);
+        memories.put("LW",wag1);
+        memories.put("table1",table);
+
+
         ArrayList<ArmLine> armlines = new ArrayList<>();
         ArrayList<Statement> statements01 = new ArrayList<>();
-        memories.put("LW",wag1);
         statements01.add(new Statement("LW",Statement.getOperator("<-"),"Cat"));
         statements01.add(new Statement("reg2",Statement.getOperator("<-"),"h"));
         ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
+
         ArrayList<Statement> statements02 = new ArrayList<>();
         statements02.add(new Statement("reg1",Statement.getOperator("<-"),"Spok"));
         statements02.add(new Statement("reg2",Statement.getOperator("<-"),"Kirk"));
@@ -154,8 +160,12 @@ public class R_machine {
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-
+        table.write("Scotty");
+        table.write("Khan");
+        System.out.println(table.searchTrue("Scotty"));
+        System.out.println(table.searchTrue("Kirk"));
         r_machine.analyzer();
+
 
     }
 }

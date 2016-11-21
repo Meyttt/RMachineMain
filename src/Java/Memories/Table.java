@@ -21,6 +21,21 @@ public class Table implements Memory {
         this.colnames = colnames;
     }
 
+    public Table(String tname, ArrayList<String> colnames) {
+        this.tname = tname;
+        this.colnames = colnames;
+        for(int count = 0; count < 1; count++) {
+            table.add(count, colnames);
+//            table.get(count).add("");
+        }
+    }
+
+    public Table(String tname) {
+        this.tname = tname;
+        this.strnumber = 0;
+        this.colnumber = 0;
+    }
+
     public String getName() {
         return tname;
     }
@@ -64,8 +79,21 @@ public class Table implements Memory {
         return (this.table.get(strnumber).get(colnumber) != null);
     }
 
-    boolean searchTrue(String value) {
-        this.write();
+    public boolean addNewStr(String value) {
+        this.table.add(colnames);
+        this.table.get(this.table.size()-1).add(value);
+        colnumber = this.table.size()-1;
+        return (this.table.get(this.table.size()-1).get(colnumber) != null);
+    }
+    public boolean insertNewStr(String value) {
+        this.table.add(strnumber-1,colnames);
+        this.table.get(strnumber-1).add(value);
+        colnumber = this.table.get(strnumber-1).size()-1;
+        return (this.table.get(strnumber-1).get(colnumber) != null);
+    }
+
+    public boolean searchTrue(String value) {
+//        this.write();
 
         int i, j = 0;
         for (i = 0; i < this.table.size(); i++)
@@ -73,23 +101,23 @@ public class Table implements Memory {
                 if (Objects.equals(this.table.get(i).get(j), value)) {
                     this.strnumber = i;
                     this.colnumber = j;
-                    break;
+                    return true;
                 }
-        return !(i == (this.table.size() - 1) && j == this.table.get(i).size() && this.strnumber != i && this.colnumber != j);
+        return (i == (this.table.size() - 1) && j == (this.table.get(i).size()-1) && this.strnumber != i && this.colnumber != j);
     }
 
-    boolean searchTrue(int searchcolumn, String value) {
-        int i;
-        for (i = 0; i < this.table.size(); i++)
-            if (Objects.equals(this.table.get(i).get(searchcolumn), value)) {
-                this.strnumber = i;
-                this.colnumber = searchcolumn;
-                break;
-            }
-        return !(i == (this.table.size() - 1) && this.strnumber != i);
-    }
+//    public boolean searchTrue(int searchcolumn, String value) {
+//        int i;
+//        for (i = 0; i < this.table.size(); i++)
+//            if (Objects.equals(this.table.get(i).get(searchcolumn), value)) {
+//                this.strnumber = i;
+//                this.colnumber = searchcolumn;
+//                break;
+//            }
+//        return !(i == (this.table.size() - 1) && this.strnumber != i);
+//    }
 
-    boolean searchFalse(String value) {
+    public boolean searchFalse(String value) {
         int i, j = 0;
         for (i = 0; i < this.table.size(); i++)
             for (j = 0; j < this.table.get(i).size(); j++)
@@ -101,16 +129,16 @@ public class Table implements Memory {
         return i == (this.table.size() - 1) && j == this.table.get(i).size() && this.strnumber != i && this.colnumber != j;
     }
 
-    boolean searchFalse(int searchcolumn, String value) {
-        int i;
-        for (i = 0; i < this.table.size(); i++)
-            if (Objects.equals(this.table.get(i).get(searchcolumn), value)) {
-                this.strnumber = i;
-                this.colnumber = searchcolumn;
-                break;
-            }
-        return i == (this.table.size() - 1) && this.strnumber != i;
-    }
+//    public boolean searchFalse(int searchcolumn, String value) {
+//        int i;
+//        for (i = 0; i < this.table.size(); i++)
+//            if (Objects.equals(this.table.get(i).get(searchcolumn), value)) {
+//                this.strnumber = i;
+//                this.colnumber = searchcolumn;
+//                break;
+//            }
+//        return i == (this.table.size() - 1) && this.strnumber != i;
+//    }
 
     public String toString(){
         String answer=null;

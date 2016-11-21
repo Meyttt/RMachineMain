@@ -34,13 +34,13 @@
                 </edge>
                 <edge end = "2">
                     <predicate type="expression">
-						<memory name = "a"/>
+						<left value = "a"/>
 						<sign>-&gt;</sign>
-						<memory name = "b"/>
+						<right value = "b"/>
 					</predicate>
 					<operation>
 						<left value =  "reg1"/>
-						<operator>&le;-</operator>
+						<operator>&lt;-</operator>
 						<right value = "Hello World"/>
 					</operation>
 					<operation>

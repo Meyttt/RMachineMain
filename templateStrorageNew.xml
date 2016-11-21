@@ -35,12 +35,12 @@
                 <edge end = "2">
                     <predicate type="expression">
 						<memory name = "a"/>
-						<sign>&gt;</sign>
+						<sign>-&gt;</sign>
 						<memory name = "b"/>
 					</predicate>
 					<operation>
 						<left value =  "reg1"/>
-						<operator>-&gt;</operator>
+						<operator>&le;-</operator>
 						<right value = "Hello World"/>
 					</operation>
 					<operation>
@@ -63,7 +63,7 @@
 					</operation>
 				</edge>
 				<edge end = "4">
-					<predicate type="Register" name="Register"/>
+					<predicate type="memory" name="Register"/>
 					<operation>
 						<left value = "ct1"/>
 						<operator>-&gt;</operator>

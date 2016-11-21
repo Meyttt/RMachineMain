@@ -23,7 +23,11 @@ public class Register implements Memory {
     public int size() { return this.value.length(); }
 
     boolean write(String register) {
-        this.value += register;
+        if( this.value == null) {
+            this.value = register;
+        }else{
+            this.value += register;
+        }
         return true;
     }
 

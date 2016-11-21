@@ -28,6 +28,7 @@ public class AlgorithmReader {
         Document document = builder.parse(new File("templateStrorage.xml"));
         HashMap<String, Memory> memoriesMap = new HashMap<>();
         NodeList armsMemory = document.getElementsByTagName("memory");
+
         for (int j = 0; j < armsMemory.getLength(); j++) {
             NamedNodeMap atrs = armsMemory.item(j).getAttributes();
             switch (atrs.getNamedItem("type").getNodeValue()) {

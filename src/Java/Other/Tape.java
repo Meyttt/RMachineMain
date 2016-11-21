@@ -7,7 +7,7 @@ import java.util.Queue;
 /**
  * Created by Admin on 28.10.2016.
  */
-
+//TODO: Переписать Tape под постоянное обращене и проверку, какой символ сейчас на ленте
 /**
  * Класс ленты, реализован на основе очереди и итератора для сохранения возможности вывода в любой момент всей ленты.
  * Чтение из ленты осуществляется методом read;
@@ -34,6 +34,9 @@ public class Tape {
     public Character read(){
         return it.next(); // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
     }
+//    public Character readN(){
+//        return it.toString();
+//    }
     public int size() {
         return tape.size();
     }

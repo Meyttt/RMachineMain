@@ -2,13 +2,16 @@ package Other;
 
 import Logic.Arm;
 import Logic.ArmLine;
-import Logic.*;
-import Memories.*;
+import Logic.Condition;
+import Logic.Statement;
+import Memories.Alphabet;
+import Memories.Memory;
+import Memories.Register;
+import Memories.Wagon;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Set;
 
 /**
@@ -46,6 +49,10 @@ public class R_machine {
             }
         }
     }
+
+    /**
+     * Основной цикл обхода алгортма. Без аргуентов вызывается один аз при запуске Р-машины.
+     */
     public void analyzer(){
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
@@ -55,22 +62,23 @@ public class R_machine {
             System.err.println("Невозможно обработать алгоритм без нулевой вершины");
             System.exit(-1);
         }
-        ArrayList<ArmLine> lines = firstArm.getLines();
+        ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
         for(ArmLine line:lines){
-            if(line.compare(this.tape)){
+            if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 String endNumber = line.getEndArmNumber();
-                for(Statement statement:line.getStatements()){
+                for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
                     statement.doStatement(storage,tape);
                 }
-                if(endNumber == "#") {
-                    System.out.println("Конец программы");
-                    Set<String> names = this.allStorage.storage.getMemories().keySet();
-                    for(String name:names){
-                        System.out.println(this.allStorage.storage.getMemories().get(name));
-                    }
-                    return;
-                }
-                analyzer(endNumber);
+               //if ( this.allStorage.getTape().)
+//                if(Objects.equals(endNumber, "#")) { //если указано, что следующая вершина конечная - вывод состояний вех памятей и возврат из обхода
+//                    System.out.println("Конец программы");
+//                    Set<String> names = this.allStorage.storage.getMemories().keySet();
+//                    for(String name:names){
+//                        System.out.println(this.allStorage.storage.getMemories().get(name));
+//                    }
+//                    return;
+//                }
+                analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
             }
         }
 
@@ -108,10 +116,13 @@ public class R_machine {
 
 
     public static void main(String args[]) throws FileNotFoundException {
+        //Cоздание ленты ввода
         Tape tape = new Tape("thisIsTape");
         HashMap<String, Arm> arms= new HashMap<>();
         HashMap<String,Memory> memories = new HashMap<>();
         HashMap<String,Alphabet> alphabets = new HashMap<>();
+        //Создание памятей пустыми (начальное сстояние)
+        Wagon wag1 = new Wagon("LW","RW", null);
         Register reg1 = new Register("reg1",null);
         Register reg2 = new Register("reg2", null);
         Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
@@ -120,9 +131,10 @@ public class R_machine {
         memories.put(reg2.getname(),reg2);
         ArrayList<ArmLine> armlines = new ArrayList<>();
         ArrayList<Statement> statements01 = new ArrayList<>();
-        statements01.add(new Statement("reg1",Statement.getOperator("<-"),"Cat"));
-        statements01.add(new Statement("reg2",Statement.getOperator("<-"),"Dog"));
-        ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"#");
+        memories.put("LW",wag1);
+        statements01.add(new Statement("LW",Statement.getOperator("<-"),"Cat"));
+        statements01.add(new Statement("reg2",Statement.getOperator("<-"),"h"));
+        ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
         ArrayList<Statement> statements02 = new ArrayList<>();
         statements02.add(new Statement("reg1",Statement.getOperator("<-"),"Spok"));
@@ -142,6 +154,7 @@ public class R_machine {
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
+
         r_machine.analyzer();
 
     }

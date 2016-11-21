@@ -4,9 +4,7 @@ import Memories.Counter;
 import Memories.Register;
 import Memories.Wagon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by Admin on 28.10.2016.
@@ -122,7 +120,7 @@ public class TestClass {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main6(String[] args) {
         Wagon wagon = new Wagon("LN","RN", new ArrayList<>());
         wagon.write("something","LN");
         System.out.println(wagon);
@@ -133,6 +131,16 @@ public class TestClass {
         counter.write("1","counter");
         System.out.println(counter);
 
+
+    }
+
+    public static void main(String[] args) {
+        Queue<Character> queue = new LinkedList<>();
+        Iterator<Character> it = queue.iterator();
+        queue.add('a');
+        queue.add('b');
+        queue.add('c');
+        queue.add('d');
 
     }
 

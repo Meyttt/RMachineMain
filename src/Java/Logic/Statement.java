@@ -3,6 +3,7 @@ package Logic;
 import Memories.Memory;
 import Other.Storage;
 import Other.Tape;
+import SPO.Processor;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -204,7 +205,7 @@ public class Statement {
             if(this.operator.left=='/'){
                 clear(this.leftArg,storage.getMemories());
             }
-            write(this.leftArg,read(this.rightArg,storage.getMemories()),storage.getMemories());
+            write(this.leftArg,Processor.count(read(this.rightArg,storage.getMemories())),storage.getMemories());
             if(this.operator.right.equals('/')){
                 clear(this.rightArg,storage.getMemories());
             }
@@ -212,7 +213,7 @@ public class Statement {
             if(this.operator.right.equals('/')){
                 clear(rightArg,storage.getMemories());
             }
-            write(rightArg,read(leftArg,storage.getMemories()),storage.getMemories());
+            write(rightArg, Processor.count(read(leftArg,storage.getMemories())),storage.getMemories());
             if(this.operator.left.equals('/')){
                 clear(leftArg,storage.getMemories());
             }

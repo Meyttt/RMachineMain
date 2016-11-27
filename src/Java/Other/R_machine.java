@@ -76,7 +76,16 @@ public class R_machine {
 //                    }
 //                    return;
 //                }
-                if(endNumber == "#") {
+//                if(endNumber == "#") {
+//                    System.out.println("Конец программы");
+//                    Set<String> names = this.allStorage.storage.getMemories().keySet();
+//                    for(String name:names){
+//                        System.out.println(this.allStorage.storage.getMemories().get(name));
+//                    }
+//                    return;
+//                }
+
+                if(this.tape.readCurrent()=='#'){
                     System.out.println("Конец программы");
                     Set<String> names = this.allStorage.storage.getMemories().keySet();
                     for(String name:names){
@@ -105,7 +114,8 @@ public class R_machine {
                 for(Statement statement:line.getStatements()){
                     statement.doStatement(storage,tape);
                 }
-                if(endNumber == "#") {
+
+                if(this.tape.readCurrent()=='#'){
                     System.out.println("Конец программы");
                     Set<String> names = this.allStorage.storage.getMemories().keySet();
                     for(String name:names){
@@ -113,6 +123,15 @@ public class R_machine {
                     }
                     return;
                 }
+
+//                if(endNumber == "#") {
+//                    System.out.println("Конец программы");
+//                    Set<String> names = this.allStorage.storage.getMemories().keySet();
+//                    for(String name:names){
+//                        System.out.println(this.allStorage.storage.getMemories().get(name));
+//                    }
+//                    return;
+//                }
                 analyzer(endNumber);
             }
         }
@@ -127,7 +146,7 @@ public class R_machine {
         HashMap<String,Alphabet> alphabets = new HashMap<>();
 
         //Cоздание ленты ввода
-        Tape tape = new Tape("thisIsTape");
+        Tape tape = new Tape("t#");
         Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
         alphabets.put(alphabet.getFullname(),alphabet);
 
@@ -147,12 +166,12 @@ public class R_machine {
         ArrayList<ArmLine> armlines = new ArrayList<>();
         ArrayList<Statement> statements01 = new ArrayList<>();
         statements01.add(new Statement("LW",Statement.getOperator("<-"),"Cat"));
-        statements01.add(new Statement("reg2",Statement.getOperator("<-"),"h"));
+        statements01.add(new Statement("reg2",Statement.getOperator("<-"),"13/3-6"));
         ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
 
         ArrayList<Statement> statements02 = new ArrayList<>();
-        statements02.add(new Statement("reg1",Statement.getOperator("<-"),"Spok"));
+        statements02.add(new Statement("reg1",Statement.getOperator("<-"),"nop"));
         statements02.add(new Statement("reg2",Statement.getOperator("<-"),"Kirk"));
         ArmLine arm02 = new ArmLine("0",new Condition("test"),statements02,"2");
         armlines.add(arm02);

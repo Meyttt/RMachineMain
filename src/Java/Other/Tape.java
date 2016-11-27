@@ -1,5 +1,6 @@
 package Other;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,32 +14,37 @@ import java.util.Queue;
  * Чтение из ленты осуществляется методом read;
  */
 public class Tape {
-    Queue<Character> tape=new LinkedList<>();
+    char[] tape;
+    int counter;
+//    Queue<Character> tape=new LinkedList<>();
     public Tape(String tapeValue){
         char[] charValue = tapeValue.toCharArray();
         LinkedList<Character> charsList = new LinkedList<>();
         for(Character ch:charValue){
             charsList.add(ch);
         }
-        this.tape=charsList;
-        this.it = tape.iterator();
+        this.tape=tapeValue.toCharArray();
+        this.counter=0;
     }
-    Iterator<Character> it;
-    public Tape(Queue<Character> tape) {
+//    Iterator<Character> it;
+    public Tape(char[] tape) {
         this.tape = tape;
-        this.it = tape.iterator();
+        this.counter=0;
     }
 
 
 
     public Character read(){
-        return it.next(); // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
+        return tape[this.counter++]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
+    }
+    public Character readCurrent(){
+        return tape[this.counter];
     }
 //    public Character readN(){
 //        return it.toString();
 //    }
     public int size() {
-        return tape.size();
+        return tape.length-counter;
     }
     public String toString(){
         String answer="";

@@ -1,6 +1,7 @@
 package Memories;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -11,8 +12,8 @@ public class Table implements Memory {
     private String tname;
     ArrayList<ArrayList<String>> table = new ArrayList<>();
     ArrayList<String> colnames = new ArrayList<>();
-    private int strnumber;
-    private int colnumber;
+    private int strnumber=0;
+    private int colnumber=0;
 //    private int columns;
 
     public Table(String tname, ArrayList<ArrayList<String>> table, ArrayList<String> colnames) {
@@ -28,6 +29,15 @@ public class Table implements Memory {
             table.add(count, colnames);
 //            table.get(count).add("");
         }
+    }
+    public Table(String tname,ArrayList<ArrayList<String>> table,String[] colnames) {
+        this.tname = tname;
+        if(table!=null) {
+            this.table = table;
+        }
+        ArrayList<String> list = new ArrayList<>();
+        Collections.addAll(list, colnames);
+        this.colnames = list;
     }
 
     public Table(String tname) {
@@ -64,7 +74,11 @@ public class Table implements Memory {
 
     @Override
     public boolean write(String... args) {
-        this.table.get(strnumber).add(colnumber, args[0]);
+        if(this.table.size()==0){
+            this.table.add(new ArrayList<>());
+        }
+            this.table.get(strnumber).add(colnumber, args[0]);
+
         return (this.table.get(strnumber).get(colnumber) != null);
     }
 
@@ -74,10 +88,10 @@ public class Table implements Memory {
         return table.isEmpty();
     }
 
-    public boolean write(String value) {
-        this.table.get(strnumber).add(colnumber, value);
-        return (this.table.get(strnumber).get(colnumber) != null);
-    }
+//    public boolean write(String value) {
+//        this.table.get(strnumber).add(colnumber, value);
+//        return (this.table.get(strnumber).get(colnumber) != null);
+//    }
 
     public boolean addNewStr(String value) {
         this.table.add(colnames);

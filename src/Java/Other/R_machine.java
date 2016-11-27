@@ -9,6 +9,7 @@ import Memories.*;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -75,6 +76,14 @@ public class R_machine {
 //                    }
 //                    return;
 //                }
+                if(endNumber == "#") {
+                    System.out.println("Конец программы");
+                    Set<String> names = this.allStorage.storage.getMemories().keySet();
+                    for(String name:names){
+                        System.out.println(this.allStorage.storage.getMemories().get(name));
+                    }
+                    return;
+                }
                 analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
             }
         }
@@ -126,7 +135,7 @@ public class R_machine {
         Wagon wag1 = new Wagon("LW","RW", null);
         Register reg1 = new Register("reg1",null);
         Register reg2 = new Register("reg2", null);
-        Table table = new Table("table1", new ArrayList<String>());
+        Table table = new Table("tab",null,new String[]{"Type","Value"});
 
 
         memories.put(reg1.getname(),reg1);
@@ -153,6 +162,7 @@ public class R_machine {
         ArrayList<ArmLine> armlines1 = new ArrayList<>();
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
+        statements12.add(new Statement("table1",Statement.getOperator("<-"),"test"));
         ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
         armlines.add(arm12);
         Arm arm1 = new Arm("1", armlines1);

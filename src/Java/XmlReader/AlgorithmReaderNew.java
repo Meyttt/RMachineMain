@@ -125,7 +125,7 @@ public class AlgorithmReaderNew {
                                                 sign=exprArgs.item(p).getFirstChild().getNodeValue();
                                             }
                                         }
-                                        condition= new Condition()
+//                                        condition= new Condition()
 
                                 }
 //

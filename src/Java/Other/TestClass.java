@@ -2,6 +2,7 @@ package Other;
 
 import Memories.Counter;
 import Memories.Register;
+import Memories.Table;
 import Memories.Wagon;
 
 import java.util.*;
@@ -134,13 +135,22 @@ public class TestClass {
 
     }
 
-    public static void main(String[] args) {
+    public static void main7(String[] args) {
         Queue<Character> queue = new LinkedList<>();
         Iterator<Character> it = queue.iterator();
         queue.add('a');
         queue.add('b');
         queue.add('c');
         queue.add('d');
+
+    }
+
+    public static void main(String[] args) {
+        Table table = new Table("tab",null,new String[]{"Type","Value"});
+        table.write("Word","thisWillBeIgnored");
+        System.out.println(table);
+//        ArrayList<String> testList = new ArrayList<>();
+//        System.out.println(testList.get(0));
 
     }
 

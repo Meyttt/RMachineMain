@@ -4,6 +4,7 @@ package Logic; /**
 import Memories.*;
 import Other.*;
 
+import java.io.*;
 import java.util.Objects;
 
 
@@ -23,7 +24,15 @@ public class Condition {
     Memory memoryright;
     String oper;
 
-    public boolean checkABoolean(Tape tape) {
+    public boolean checkABoolean(Tape tape) throws IOException, ClassNotFoundException {
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        ObjectOutputStream ous = new ObjectOutputStream(baos);
+//        //сохраняем состояние кота Васьки в поток и закрываем его(поток)
+//        ous.writeObject(tape);
+//        ous.close();
+//        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+//        ObjectInputStream ois = new ObjectInputStream(bais);
+//        Tape tape1 = (Tape) ois.readObject();
         if(this.memoryright != null && this.oper != null && this.memoryleft != null) return compare(this.memoryleft, this.oper, this.memoryright);
         if(this.alphabet != null) return compare(this.alphabet, tape);
         if(this.text != null) return compare(this.text, tape);
@@ -58,12 +67,15 @@ public class Condition {
             return aBoolean;
         }
         for(int i = 0; i < str.length(); i++) {
-            if (!(str.charAt(i) == tape.read())){
+            char ch=tape.read(i);
+            System.out.println(ch);
+            if (!(str.charAt(i) == ch)){
                 aBoolean = false;
                 return aBoolean;
             }
         }
         aBoolean = true;
+        tape.move(str.length());
         return aBoolean;
     }
 
@@ -71,7 +83,7 @@ public class Condition {
     private boolean compare(Memory memory, Tape tape) {
 
         for(int i = 0; i < memory.read().length(); i++) {
-            if (!(memory.read().charAt(i) == tape.read())) {
+            if (!(memory.read().charAt(i) == tape.read(i))) {
                 aBoolean = false;
                 return aBoolean;
             }
@@ -82,98 +94,99 @@ public class Condition {
 
 //  3. Предикат синтерм: сверка текущего символа входной ленты с любым символом данного алфавита
     private boolean compare(Alphabet alphabet, Tape tape) {
-        char buf = tape.read();
+        char buf = tape.readCurrent();
         for (int i = 0; i < alphabet.read().length; i++) {
             if (alphabet.read()[i] == buf) {
                 aBoolean = true;
                 return aBoolean;
             }
         }
+        tape.move(1);
         aBoolean = false;
         return aBoolean;
     }
 
 //  4. Предикат образец: по символу '!' происходит поиск элемента не схожего с теми, что описаны в операнде
 //    public class Expression()
-    private boolean compare(char ch, Memory memory, Tape tape) {
-        if(ch == '!') {
-            String str;
-            int count = 0;
-            for(int i = 0; i < memory.size(); i++) {
-                if(memory.read().charAt(i) == tape.read()){}
-                else {
-                    aBoolean = false;
-                    return aBoolean;
-                }
-            }
-            aBoolean = true;
-            return aBoolean;
-        } else if (ch == '?') {
-            String buf = null;
-            while (buf != memory.read() || tape.read() != null) {
-                char cursymbol = tape.read();
-                int count = 0;
-                for (int i = 0; i < tape.size(); i++) {
-                    if(memory.read().charAt(i) != cursymbol) {}
-                    else  {
-                        buf += cursymbol;
-                        break;
-                    }
-                }
-                for(int j = 0; j < memory.size(); j++) {
-                    if (memory.read().charAt(j) == (cursymbol = tape.read())) {
-                        buf += cursymbol;
-                    }
-                    else break;
-                }
-            }
-            aBoolean = true;
-            return aBoolean;
-        }
-        System.out.println("Error. Wrong symbol-sign.");
-        return false;
-    }
+//    private boolean compare(char ch, Memory memory, Tape tape) {
+//        if(ch == '!') {
+//            String str;
+//            int count = 0;
+//            for(int i = 0; i < memory.size(); i++) {
+//                if(memory.read().charAt(i) == tape.read()){}
+//                else {
+//                    aBoolean = false;
+//                    return aBoolean;
+//                }
+//            }
+//            aBoolean = true;
+//            return aBoolean;
+//        } else if (ch == '?') {
+//            String buf = null;
+//            while (buf != memory.read() || tape.read() != null) {
+//                char cursymbol = tape.read();
+//                int count = 0;
+//                for (int i = 0; i < tape.size(); i++) {
+//                    if(memory.read().charAt(i) != cursymbol) {}
+//                    else  {
+//                        buf += cursymbol;
+//                        break;
+//                    }
+//                }
+//                for(int j = 0; j < memory.size(); j++) {
+//                    if (memory.read().charAt(j) == (cursymbol = tape.read())) {
+//                        buf += cursymbol;
+//                    }
+//                    else break;
+//                }
+//            }
+//            aBoolean = true;
+//            return aBoolean;
+//        }
+//        System.out.println("Error. Wrong symbol-sign.");
+//        return false;
+//    }
 
-    private boolean compare(char ch, Alphabet alphabet, Tape tape) {
-        if(ch == '!') {
-            int i = 0;
-            aBoolean = true;
-            while(aBoolean) {
-                char cursymbol = tape.read();
-                while (alphabet.read()[i] != cursymbol && i < alphabet.read().length) {
-                    i++;
-                }
-                if (i >= alphabet.read().length) aBoolean = false;
-                aBoolean = true;
-            }
-            return !aBoolean;
-        } else if (ch == '?') {
-            int i = 0;
-            aBoolean = true;
-            while(aBoolean) {
-                char cursymbol = tape.read();
-                while (alphabet.read()[i] != cursymbol && i < alphabet.read().length) {
-                    i++;
-                }
-                if (i >= alphabet.read().length) aBoolean = true;
-                aBoolean = false;
-            }
-            aBoolean = true;
-            while(aBoolean) {
-                char cursymbol = tape.read();
-                for(int k = 0; k < alphabet.read().length; k++) {
-                    if(alphabet.read()[k] == cursymbol) {
-                        break;
-                    }
-                }
-                if(i >= alphabet.read().length) aBoolean = false;
-                else aBoolean = true;
-            }
-            return !aBoolean;
-        }
-        System.out.println("Error. Wrong symbol-sign.");
-        return (aBoolean = false);
-    }
+//    private boolean compare(char ch, Alphabet alphabet, Tape tape) {
+//        if(ch == '!') {
+//            int i = 0;
+//            aBoolean = true;
+//            while(aBoolean) {
+//                char cursymbol = tape.read(i);
+//                while (alphabet.read()[i] != cursymbol && i < alphabet.read().length) {
+//                    i++;
+//                }
+//                if (i >= alphabet.read().length) aBoolean = false;
+//                aBoolean = true;
+//            }
+//            return !aBoolean;
+//        } else if (ch == '?') {
+//            int i = 0;
+//            aBoolean = true;
+//            while(aBoolean) {
+//                char cursymbol = tape.read(i);
+//                while (alphabet.read()[i] != cursymbol && i < alphabet.read().length) {
+//                    i++;
+//                }
+//                if (i >= alphabet.read().length) aBoolean = true;
+//                aBoolean = false;
+//            }
+//            aBoolean = true;
+//            while(aBoolean) {
+//                char cursymbol = tape.read(i);
+//                for(int k = 0; k < alphabet.read().length; k++) {
+//                    if(alphabet.read()[k] == cursymbol) {
+//                        break;
+//                    }
+//                }
+//                if(i >= alphabet.read().length) aBoolean = false;
+//                else aBoolean = true;
+//            }
+//            return !aBoolean;
+//        }
+//        System.out.println("Error. Wrong symbol-sign.");
+//        return (aBoolean = false);
+//    }
 
     private boolean compare(Memory memoryleft, String oper, Memory memoryright) {
         switch (oper) {

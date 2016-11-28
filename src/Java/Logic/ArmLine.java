@@ -2,6 +2,7 @@ package Logic;
 
 import Other.Tape;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -42,7 +43,7 @@ public class ArmLine {
             System.out.println(statements.get(i));
         }
     }
-    public boolean compare(Tape tape){
+    public boolean compare(Tape tape) throws IOException, ClassNotFoundException {
         return condition.checkABoolean(tape);
     }
     String currentArmNumber;

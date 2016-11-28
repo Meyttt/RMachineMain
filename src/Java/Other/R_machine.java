@@ -6,10 +6,9 @@ import Logic.Condition;
 import Logic.Statement;
 import Memories.*;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -39,7 +38,7 @@ public class R_machine {
         return firstArm;
     }
 
-    public void checkArm(Arm curretArm) {
+    public void checkArm(Arm curretArm) throws IOException, ClassNotFoundException {
         ArrayList<ArmLine> lines = curretArm.getLines();
         for(ArmLine line:lines){
             if(line.compare(tape)){
@@ -51,7 +50,7 @@ public class R_machine {
     /**
      * Основной цикл обхода алгортма. Без аргуентов вызывается один аз при запуске Р-машины.
      */
-    public void analyzer(){
+    public void analyzer() throws IOException, ClassNotFoundException {
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
         if(arms.containsKey("0")){
@@ -98,7 +97,7 @@ public class R_machine {
         }
 
     }
-    public void analyzer(String armNumber){
+    public void analyzer(String armNumber) throws IOException, ClassNotFoundException {
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
         if(arms.containsKey(armNumber)){
@@ -109,12 +108,11 @@ public class R_machine {
         }
         ArrayList<ArmLine> lines = firstArm.getLines();
         for(ArmLine line:lines){
-            if(line.compare(this.tape)){
+            if(line.compare(this.tape)) {
                 String endNumber = line.getEndArmNumber();
-                for(Statement statement:line.getStatements()){
-                    statement.doStatement(storage,tape);
+                for (Statement statement : line.getStatements()) {
+                    statement.doStatement(storage, tape);
                 }
-
                 if(this.tape.readCurrent()=='#'){
                     System.out.println("Конец программы");
                     Set<String> names = this.allStorage.storage.getMemories().keySet();
@@ -123,6 +121,10 @@ public class R_machine {
                     }
                     return;
                 }
+                analyzer(endNumber);
+            }
+
+
 
 //                if(endNumber == "#") {
 //                    System.out.println("Конец программы");
@@ -132,21 +134,21 @@ public class R_machine {
 //                    }
 //                    return;
 //                }
-                analyzer(endNumber);
-            }
+
+
         }
 
     }
 
 
 
-    public static void main(String args[]) throws FileNotFoundException {
+    public static void main(String args[]) throws IOException, ClassNotFoundException {
         HashMap<String, Arm> arms= new HashMap<>();
         HashMap<String,Memory> memories = new HashMap<>();
         HashMap<String,Alphabet> alphabets = new HashMap<>();
 
         //Cоздание ленты ввода
-        Tape tape = new Tape("t#");
+        Tape tape = new Tape("ta#");
         Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
         alphabets.put(alphabet.getFullname(),alphabet);
 
@@ -182,7 +184,7 @@ public class R_machine {
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
         statements12.add(new Statement("table1",Statement.getOperator("<-"),"test"));
-        ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
+        ArmLine arm12 = new ArmLine("1",new Condition("a"),statements12,"#");
         armlines.add(arm12);
         Arm arm1 = new Arm("1", armlines1);
         arms.put("0",arm0);

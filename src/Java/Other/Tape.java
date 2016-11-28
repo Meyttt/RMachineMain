@@ -1,9 +1,7 @@
 package Other;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by Admin on 28.10.2016.
@@ -13,7 +11,8 @@ import java.util.Queue;
  * Класс ленты, реализован на основе очереди и итератора для сохранения возможности вывода в любой момент всей ленты.
  * Чтение из ленты осуществляется методом read;
  */
-public class Tape {
+//TODO: запись с ленты в память
+public class Tape implements Serializable {
     char[] tape;
     int counter;
 //    Queue<Character> tape=new LinkedList<>();
@@ -34,8 +33,14 @@ public class Tape {
 
 
 
-    public Character read(){
-        return tape[this.counter++]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
+//    public Character read(){
+//        return tape[this.counter++];
+//    }
+    public Character read(int addition){
+        return tape[counter+addition];
+    }
+    public void move(int length){
+        this.counter+=length;
     }
     public Character readCurrent(){
         return tape[this.counter];

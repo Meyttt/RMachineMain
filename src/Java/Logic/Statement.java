@@ -15,24 +15,24 @@ import java.util.Set;
 public class Statement {
     //TODO: реализовать выполнение выражения
 //    String lefStr, rightStr;
-//    Memory leftMem,rightMem;
+//    Memories.Memory leftMem,rightMem;
 //    Operator operator;
 //
-//    public Statement(String lefStr, Operator operator, Memory rightMem) {
+//    public Logic.Statement(String lefStr, Operator operator, Memories.Memory rightMem) {
 //        this.lefStr = lefStr;
 //        this.rightMem = rightMem;
 //        this.operator = operator;
 //        this.rightStr=null;
 //        this.leftMem=null;
 //    }
-//    public Statement(Memory leftMem, Operator operator, Memory rightMem) {
+//    public Logic.Statement(Memories.Memory leftMem, Operator operator, Memories.Memory rightMem) {
 //        this.lefStr = null;
 //        this.rightMem = rightMem;
 //        this.operator = operator;
 //        this.rightStr=null;
 //        this.leftMem=leftMem;
 //    }
-//    public Statement(Memory leftMem, Operator operator, String rightStr) {
+//    public Logic.Statement(Memories.Memory leftMem, Operator operator, String rightStr) {
 //        this.lefStr = null;
 //        this.rightMem = null;
 //        this.operator = operator;
@@ -65,6 +65,10 @@ public class Statement {
 
         }
     }
+
+//    public static boolean searchTrue(String table) {
+//        return true
+//    }
     /**
      * У нас есть 2 базовых вида выражений: чтение/запись (<-, ->), для каждого из которых можно задать очистку ячейки памяти.
      * Т.о., у нас есть три основных поля для этого варианта (очистка левого операнда, стрелка, очистка правого операнда)
@@ -113,12 +117,12 @@ public class Statement {
     }
 //    public static class RightSide{
 //        String stringRight;
-//        Memory memoryRight;
+//        Memories.Memory memoryRight;
 //        RightSide(String text){
 //            stringRight = text;
 //            memoryRight=null;
 //        }
-//        RightSide(Memory rightSide){
+//        RightSide(Memories.Memory rightSide){
 //            stringRight=null;
 //            memoryRight=rightSide;
 //        }
@@ -151,7 +155,7 @@ public class Statement {
     String findWagon(String varName, HashMap<String, Memory> memories){
         Set<String> keys = memories.keySet();
         for(String key:keys) {
-            String[] parts = key.split("/*");
+            String[] parts = key.split("\\*");
             if (parts.length > 1) {
                 for (String part : parts) {
                     if (part.equals(varName)) {
@@ -176,7 +180,7 @@ public class Statement {
         System.err.println("Нет такой переменной "+varName);
     }
 
-//    public void doStatement(Storage storage, Tape tape){
+//    public void doStatement(Other.Storage storage, Other.Tape tape){
 //       if(this.operator.middle.toString().contains("<")){
 //           if(leftMem!=null){
 //               if(this.operator.left.toString().contains("/")){
@@ -219,6 +223,7 @@ public class Statement {
             }
         }
     }
+    //TODO: добавить специфичные для памятей методы
 //    }
     public String toString(){
         return leftArg.toString()+operator.toString()+rightArg.toString();

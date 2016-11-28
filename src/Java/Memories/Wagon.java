@@ -16,11 +16,15 @@ public class Wagon implements Memory {
         this.leftname = leftname;
         this.rightname = rightname;
         this.wname = leftname + "*" + rightname;
-        if(value==null) {
-            this.value = new ArrayList<>();
-        }else {
+        if(value!=null) {
             this.value = value;
         }
+    }
+
+    public Wagon(String leftname, String rightname) {
+        this.leftname = leftname;
+        this.rightname = rightname;
+        this.wname = leftname + "*" + rightname;
     }
 
     public String getName() {

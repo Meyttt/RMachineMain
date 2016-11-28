@@ -4,10 +4,10 @@
 		<comment><!-- Условный комментарий --></comment>
 		<descriptive_part>
 			<memory_block>
-				<memory type="Register" name="left"/>
-				<memory type="Counter" name="counter1"/>
-				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
-				<memory type="Table" name = "tname">
+				<memory type="Memories.Register" name="left"/>
+				<memory type="Memories.Counter" name="counter1"/>
+				<memory type="Memories.Wagon" leftName="W1LeftName" rightName="W1RightName"/>
+				<memory type="Memories.Table" name = "tname">
 					<columnsName>
 						<column>Name1</column>
 						<column>Name2</column>

@@ -1,5 +1,5 @@
 	<!DOCTYPE r-pro>
-	<r-pro version="1.0">
+	<r-pro version="0.7">
 		<progname><!-- Имя программы --></progname>
 		<comment><!-- Условный комментарий --></comment>
 		<descriptive_part>

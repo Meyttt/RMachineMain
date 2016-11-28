@@ -42,11 +42,11 @@ public class Table implements Memory {
         this.colnames = list;
     }
 
-    public Table(String tname) {
-        this.tname = tname;
-        this.strnumber = 0;
-        this.colnumber = 0;
-    }
+//    public Table(String tname) {
+//        this.tname = tname;
+//        this.strnumber = 0;
+//        this.colnumber = 0;
+//    }
 
     public String getName() {
         return tname;
@@ -71,7 +71,7 @@ public class Table implements Memory {
     public int size() { return this.table.size(); }
     //TODO: для работы с памятью нам необходимо чтение по столбцу. Иначе говоря, обращаться по имени столбца к текущей строке
     public String read(String... args) {
-        return this.table.get(strnumber).get(colnumber);
+        return this.table.get(strnumber).get(Integer.parseInt(args[0]));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Table implements Memory {
         if(this.table.size()==0){
             this.table.add(new ArrayList<>());
         }
-            this.table.get(strnumber).add(colnumber, args[0]);
+            this.table.get(strnumber).add(Integer.parseInt(args[0]), args[1]);
 
         return (this.table.get(strnumber).get(colnumber) != null);
     }
@@ -122,16 +122,6 @@ public class Table implements Memory {
         return (i == (this.table.size() - 1) && j == (this.table.get(i).size()-1) && this.strnumber != i && this.colnumber != j);
     }
 
-//    public boolean searchTrue(int searchcolumn, String value) {
-//        int i;
-//        for (i = 0; i < this.table.size(); i++)
-//            if (Objects.equals(this.table.get(i).get(searchcolumn), value)) {
-//                this.strnumber = i;
-//                this.colnumber = searchcolumn;
-//                break;
-//            }
-//        return !(i == (this.table.size() - 1) && this.strnumber != i);
-//    }
 
     public boolean searchFalse(String value) {
         int i, j = 0;
@@ -144,17 +134,6 @@ public class Table implements Memory {
                 }
         return i == (this.table.size() - 1) && j == this.table.get(i).size() && this.strnumber != i && this.colnumber != j;
     }
-
-//    public boolean searchFalse(int searchcolumn, String value) {
-//        int i;
-//        for (i = 0; i < this.table.size(); i++)
-//            if (Objects.equals(this.table.get(i).get(searchcolumn), value)) {
-//                this.strnumber = i;
-//                this.colnumber = searchcolumn;
-//                break;
-//            }
-//        return i == (this.table.size() - 1) && this.strnumber != i;
-//    }
 
     public String toString(){
         String answer=null;

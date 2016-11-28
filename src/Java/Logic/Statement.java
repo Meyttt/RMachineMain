@@ -6,7 +6,10 @@ import Other.Tape;
 import SPO.Processor;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Левая и правая часть - строки, их надо парсить
@@ -133,7 +136,28 @@ public class Statement {
             memories.get(varName).write(value);
             return;
         }else{
-            String key=findWagon(varName, memories);
+//            Pattern p = Pattern.compile("([A-z]|[a-z]|[0-9])+[.]");
+//            Matcher m = p.matcher(varName);
+//            if(m.matches()) {
+//                System.out.println("I am in!!!");
+                String tablename = null;
+                String index = null;
+                for(int i = 0; i < varName.length(); i++) {
+                    if(varName.charAt(i) == '.') {
+                        tablename = varName.substring(0,i);
+                        index = varName.substring(i+1, varName.length());
+                        System.out.println(tablename);
+                        System.out.println(index);
+                        break;
+                    }
+                }
+                String key = findTable(tablename, memories);
+                if(key!=null) {
+                    memories.get(key).write(index,value);
+                    return;
+                }
+//            }
+            /*String*/ key=findWagon(varName, memories);
             if(key!=null){
                 memories.get(key).write(value,varName);
                 return;
@@ -141,6 +165,7 @@ public class Statement {
         }
         System.err.println("Нет такой переменной "+varName);
     }
+
     public String read(String varName, HashMap<String, Memory> memories){
         if(memories.containsKey(varName)){
             return memories.get(varName).read();
@@ -166,6 +191,16 @@ public class Statement {
         }
         return null;
     }
+
+    String findTable(String varName, HashMap<String, Memory> memories) {
+        Set<String> keys = memories.keySet();
+        for(String key: keys) {
+            if(Objects.equals(key, varName))
+                return key;
+        }
+        return null;
+    }
+
     void clear(String varName, HashMap<String, Memory> memories){
         if (memories.containsKey(varName)){
             memories.get(varName).clear();

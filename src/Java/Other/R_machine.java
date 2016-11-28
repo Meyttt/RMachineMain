@@ -6,9 +6,10 @@ import Logic.Condition;
 import Logic.Statement;
 import Memories.*;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -38,7 +39,7 @@ public class R_machine {
         return firstArm;
     }
 
-    public void checkArm(Arm curretArm) throws IOException, ClassNotFoundException {
+    public void checkArm(Arm curretArm) {
         ArrayList<ArmLine> lines = curretArm.getLines();
         for(ArmLine line:lines){
             if(line.compare(tape)){
@@ -50,7 +51,7 @@ public class R_machine {
     /**
      * Основной цикл обхода алгортма. Без аргуентов вызывается один аз при запуске Р-машины.
      */
-    public void analyzer() throws IOException, ClassNotFoundException {
+    public void analyzer(){
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
         if(arms.containsKey("0")){
@@ -97,7 +98,7 @@ public class R_machine {
         }
 
     }
-    public void analyzer(String armNumber) throws IOException, ClassNotFoundException {
+    public void analyzer(String armNumber){
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
         if(arms.containsKey(armNumber)){
@@ -108,11 +109,12 @@ public class R_machine {
         }
         ArrayList<ArmLine> lines = firstArm.getLines();
         for(ArmLine line:lines){
-            if(line.compare(this.tape)) {
+            if(line.compare(this.tape)){
                 String endNumber = line.getEndArmNumber();
-                for (Statement statement : line.getStatements()) {
-                    statement.doStatement(storage, tape);
+                for(Statement statement:line.getStatements()){
+                    statement.doStatement(storage,tape);
                 }
+
                 if(this.tape.readCurrent()=='#'){
                     System.out.println("Конец программы");
                     Set<String> names = this.allStorage.storage.getMemories().keySet();
@@ -121,10 +123,6 @@ public class R_machine {
                     }
                     return;
                 }
-                analyzer(endNumber);
-            }
-
-
 
 //                if(endNumber == "#") {
 //                    System.out.println("Конец программы");
@@ -134,21 +132,21 @@ public class R_machine {
 //                    }
 //                    return;
 //                }
-
-
+                analyzer(endNumber);
+            }
         }
 
     }
 
 
 
-    public static void main(String args[]) throws IOException, ClassNotFoundException {
+    public static void main(String args[]) throws FileNotFoundException {
         HashMap<String, Arm> arms= new HashMap<>();
         HashMap<String,Memory> memories = new HashMap<>();
         HashMap<String,Alphabet> alphabets = new HashMap<>();
 
         //Cоздание ленты ввода
-        Tape tape = new Tape("ta#");
+        Tape tape = new Tape("t#");
         Alphabet alphabet = new Alphabet("Alphabet", "Alph","abcdefghi".toCharArray());
         alphabets.put(alphabet.getFullname(),alphabet);
 
@@ -156,13 +154,13 @@ public class R_machine {
         Wagon wag1 = new Wagon("LW","RW", null);
         Register reg1 = new Register("reg1",null);
         Register reg2 = new Register("reg2", null);
-        Table table = new Table("tab",null,new String[]{"Type","Value"});
+        Table table = new Table("tab",null,new String[]{"0","1"});
 
 
         memories.put(reg1.getname(),reg1);
         memories.put(reg2.getname(),reg2);
         memories.put("LW",wag1);
-        memories.put("table1",table);
+        memories.put("tab",table);
 
 
         ArrayList<ArmLine> armlines = new ArrayList<>();
@@ -183,16 +181,16 @@ public class R_machine {
         ArrayList<ArmLine> armlines1 = new ArrayList<>();
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
-        statements12.add(new Statement("table1",Statement.getOperator("<-"),"test"));
-        ArmLine arm12 = new ArmLine("1",new Condition("a"),statements12,"#");
+        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Scotty")); //TODO
+        ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
         armlines.add(arm12);
         Arm arm1 = new Arm("1", armlines1);
         arms.put("0",arm0);
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-        table.write("Scotty");
-        table.write("Khan");
+//        table.write("Scotty");
+//        table.write("Khan");
         System.out.println(table.searchTrue("Scotty"));
         System.out.println(table.searchTrue("Kirk"));
         r_machine.analyzer();

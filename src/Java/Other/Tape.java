@@ -1,6 +1,5 @@
 package Other;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
@@ -11,8 +10,7 @@ import java.util.LinkedList;
  * Класс ленты, реализован на основе очереди и итератора для сохранения возможности вывода в любой момент всей ленты.
  * Чтение из ленты осуществляется методом read;
  */
-//TODO: запись с ленты в память
-public class Tape implements Serializable {
+public class Tape {
     char[] tape;
     int counter;
 //    Queue<Character> tape=new LinkedList<>();
@@ -23,7 +21,7 @@ public class Tape implements Serializable {
             charsList.add(ch);
         }
         this.tape=tapeValue.toCharArray();
-        this.counter=0;
+        this.counter=-1;
     }
 //    Iterator<Character> it;
     public Tape(char[] tape) {
@@ -33,14 +31,8 @@ public class Tape implements Serializable {
 
 
 
-//    public Character read(){
-//        return tape[this.counter++];
-//    }
-    public Character read(int addition){
-        return tape[counter+addition];
-    }
-    public void move(int length){
-        this.counter+=length;
+    public Character read(){
+        return tape[++this.counter]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
     }
     public Character readCurrent(){
         return tape[this.counter];

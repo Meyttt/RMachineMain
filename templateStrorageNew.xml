@@ -4,14 +4,14 @@
 		<comment><!-- Условный комментарий --></comment>
 		<descriptive_part>
 			<memory_block>
-				<memory type="Memories.Register" name="reg1"/>
-				<memory type="Memories.Register" name="Memories.Register"/>
-				<memory type="Memories.Register" name="reg2"/>
-				<memory type="Memories.Counter" name="ct1"/>
-				<memory type="Memories.Counter" name="a"/>
-				<memory type="Memories.Counter" name="b"/>
-				<memory type="Memories.Wagon" leftName="W1LeftName" rightName="W1RightName"/>
-				<memory type="Memories.Table" name = "tname">
+				<memory type="Register" name="reg1"/>
+				<memory type="Register" name="Memories.Register"/>
+				<memory type="Register" name="reg2"/>
+				<memory type="Counter" name="ct1"/>
+				<memory type="Counter" name="a"/>
+				<memory type="Counter" name="b"/>
+				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
+				<memory type="Table" name = "tname">
 					<columnsName>
 						<column>Name1</column>
 						<column>Name2</column>

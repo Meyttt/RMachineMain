@@ -1,6 +1,7 @@
-package Logic; /**
+ /**
  * Created by Admin on 28.10.2016.
  */
+ package Logic;
 import Memories.*;
 import Other.*;
 

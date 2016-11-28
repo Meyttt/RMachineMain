@@ -1,4 +1,5 @@
 package Other;
+
 import Logic.Arm;
 import Memories.Alphabet;
 import Memories.Memory;

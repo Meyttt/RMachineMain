@@ -15,7 +15,7 @@ public class ArmLine {
     /**
      *
      * @param currentArmNumber номер текущей вершины (для удобства обработки)
-     * @param condition экземпляр класса Condition, определяет логику прохождения
+     * @param condition экземпляр класса Logic.Condition, определяет логику прохождения
      * @param statements список операций, выполняемых, если преликат condition истинный
      */
     String endArmNumber;

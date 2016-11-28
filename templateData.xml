@@ -4,14 +4,14 @@
 		<comment><!-- Условный комментарий --></comment>
 		<descriptive_part>
 			<memory_block>
-				<memory type="Register" name="reg1">Val1</memory>
-				<memory type="Counter" name="counter1">2</memory>
-				<memory type="Wagon" leftName="W1LeftName" rightName ="W1RightName">
+				<memory type="Memories.Register" name="reg1">Val1</memory>
+				<memory type="Memories.Counter" name="counter1">2</memory>
+				<memory type="Memories.Wagon" leftName="W1LeftName" rightName ="W1RightName">
                     <wagCell>val1</wagCell>
                     <wagCell>val2</wagCell>
                     <wagCell>val3</wagCell>
                 </memory>
-				<memory type="Table" name = "tname">
+				<memory type="Memories.Table" name = "tname">
 					<columnsName>
 						<column>Column1</column>
 						<column>Column2</column>

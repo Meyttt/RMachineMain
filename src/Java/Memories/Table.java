@@ -18,7 +18,9 @@ public class Table implements Memory {
 
     public Table(String tname, ArrayList<ArrayList<String>> table, ArrayList<String> colnames) {
         this.tname = tname;
-        this.table = table;
+        if(table!=null) {
+            this.table = table;
+        }
         this.colnames = colnames;
     }
 

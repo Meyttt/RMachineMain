@@ -1,14 +1,11 @@
 package Other;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by Admin on 28.10.2016.
  */
-//TODO: Переписать Tape под постоянное обращене и проверку, какой символ сейчас на ленте
+
 /**
  * Класс ленты, реализован на основе очереди и итератора для сохранения возможности вывода в любой момент всей ленты.
  * Чтение из ленты осуществляется методом read;
@@ -24,7 +21,7 @@ public class Tape {
             charsList.add(ch);
         }
         this.tape=tapeValue.toCharArray();
-        this.counter=0;
+        this.counter=-1;
     }
 //    Iterator<Character> it;
     public Tape(char[] tape) {
@@ -35,14 +32,11 @@ public class Tape {
 
 
     public Character read(){
-        return tape[this.counter++]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
+        return tape[++this.counter]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
     }
     public Character readCurrent(){
         return tape[this.counter];
     }
-//    public Character readN(){
-//        return it.toString();
-//    }
     public int size() {
         return tape.length-counter;
     }

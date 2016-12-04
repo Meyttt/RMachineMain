@@ -42,12 +42,6 @@ public class Table implements Memory {
         this.colnames = list;
     }
 
-//    public Table(String tname) {
-//        this.tname = tname;
-//        this.strnumber = 0;
-//        this.colnumber = 0;
-//    }
-
     public String getName() {
         return tname;
     }
@@ -79,9 +73,9 @@ public class Table implements Memory {
         if(this.table.size()==0){
             this.table.add(new ArrayList<>());
         }
-            this.table.get(strnumber).add(Integer.parseInt(args[0]), args[1]);
+        this.table.get(strnumber).add(Integer.parseInt(args[0]), args[1]);
 
-        return (this.table.get(strnumber).get(colnumber) != null);
+        return (this.table.get(strnumber).get(Integer.parseInt(args[0])) != null);
     }
 
     @Override
@@ -90,24 +84,30 @@ public class Table implements Memory {
         return table.isEmpty();
     }
 
-//    public boolean write(String value) {
+    //    public boolean write(String value) {
 //        this.table.get(strnumber).add(colnumber, value);
 //        return (this.table.get(strnumber).get(colnumber) != null);
 //    }
-
-    public boolean addNewStr(String value) {
-        this.table.add(colnames);
-        this.table.get(this.table.size()-1).add(value);
-        colnumber = this.table.size()-1;
-        return (this.table.get(this.table.size()-1).get(colnumber) != null);
+    @Override
+    public boolean addNewStr(int index, String value) {
+        this.strnumber++;
+        this.table.add(strnumber,new ArrayList<>());
+        this.table.get(strnumber).add(index, value);
+        return (this.table.get(strnumber).get(index) != null);
     }
-    public boolean insertNewStr(String value) {
-        this.table.add(strnumber-1,colnames);
-        this.table.get(strnumber-1).add(value);
-        colnumber = this.table.get(strnumber-1).size()-1;
-        return (this.table.get(strnumber-1).get(colnumber) != null);
+    @Override
+    public boolean insertNewStr(int index, String value) {
+        if(strnumber == 0) {
+            this.table.add(0,new ArrayList<>());
+            this.table.get(0).add(index, value);
+            return (this.table.get(0).get(index) != null);
+        }
+        this.strnumber--;
+        this.table.add(strnumber,colnames);
+        this.table.get(strnumber).add(index, value);
+        return (this.table.get(strnumber).get(index) != null);
     }
-
+    @Override
     public boolean searchTrue(String value) {
 //        this.write();
 
@@ -122,7 +122,7 @@ public class Table implements Memory {
         return (i == (this.table.size() - 1) && j == (this.table.get(i).size()-1) && this.strnumber != i && this.colnumber != j);
     }
 
-
+    @Override
     public boolean searchFalse(String value) {
         int i, j = 0;
         for (i = 0; i < this.table.size(); i++)

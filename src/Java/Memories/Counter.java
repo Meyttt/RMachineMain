@@ -17,6 +17,26 @@ public class Counter implements Memory {
     }
     public int size() { return this.size(); }
 
+    @Override
+    public boolean addNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean insertNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchTrue(String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchFalse(String value) {
+        return false;
+    }
+
     boolean write(int counter) {
         this.counter = counter;
         return (this.counter != 0);

@@ -22,6 +22,26 @@ public class Register implements Memory {
 
     public int size() { return this.value.length(); }
 
+    @Override
+    public boolean addNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean insertNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchTrue(String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchFalse(String value) {
+        return false;
+    }
+
     boolean write(String register) {
         if(this.value!=null) {
             this.value += register;
@@ -40,7 +60,7 @@ public class Register implements Memory {
         return this.write(args[0]);
     }
 
-   public boolean clear() {
+    public boolean clear() {
         this.value = null;
         return true;
     }

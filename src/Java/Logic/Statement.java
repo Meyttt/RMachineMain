@@ -8,15 +8,13 @@ import SPO.Processor;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Левая и правая часть - строки, их надо парсить
  * Оператор представлен массивом из 4 символов
  */
 public class Statement {
-    //TODO: реализовать выполнение выражения
+
 //    String lefStr, rightStr;
 //    Memories.Memory leftMem,rightMem;
 //    Operator operator;
@@ -140,30 +138,48 @@ public class Statement {
 //            Matcher m = p.matcher(varName);
 //            if(m.matches()) {
 //                System.out.println("I am in!!!");
-                String tablename = null;
-                String index = null;
-                for(int i = 0; i < varName.length(); i++) {
-                    if(varName.charAt(i) == '.') {
-                        tablename = varName.substring(0,i);
-                        index = varName.substring(i+1, varName.length());
-                        System.out.println(tablename);
-                        System.out.println(index);
-                        break;
-                    }
+            String tablename = null;
+            String index = null;
+            for(int i = 0; i < varName.length(); i++) {
+                if(varName.charAt(i) == '.') {
+                    tablename = varName.substring(0,i);
+                    index = varName.substring(i+1, varName.length());
+                    break;
                 }
-                String key = findTable(tablename, memories);
-                if(key!=null) {
-                    memories.get(key).write(index,value);
-                    return;
-                }
+            }
+            String key = findTable(tablename, memories);
+            if(key!=null) {
+                memories.get(key).write(index,value);
+                return;
+            }
 //            }
-            /*String*/ key=findWagon(varName, memories);
+            key=findWagon(varName, memories);
             if(key!=null){
                 memories.get(key).write(value,varName);
                 return;
             }
         }
         System.err.println("Нет такой переменной "+varName);
+    }
+
+    public void add(HashMap<String, Memory> memories, String varName, String index, String value) {
+        if(findTable(varName, memories)!=null)
+            memories.get(varName).addNewStr(Integer.parseInt(index), value);
+    }
+
+    public void insert(HashMap<String, Memory> memories, String varName, String index, String value) {
+        if(findTable(varName, memories)!=null)
+            memories.get(varName).insertNewStr(Integer.parseInt(index), value);
+    }
+
+    public void searchTrue(HashMap<String, Memory> memories, String varName, String value) {
+        if(findTable(varName, memories)!=null)
+            memories.get(findTable(varName, memories)).searchTrue(value);
+    }
+
+    public void searchFalse(HashMap<String, Memory> memories, String varName, String value) {
+        if(findTable(varName, memories)!=null)
+            memories.get(findTable(varName, memories)).searchFalse(value);
     }
 
     public String read(String varName, HashMap<String, Memory> memories){
@@ -177,6 +193,7 @@ public class Statement {
         }
         return varName;
     }
+
     String findWagon(String varName, HashMap<String, Memory> memories){
         Set<String> keys = memories.keySet();
         for(String key:keys) {
@@ -187,7 +204,9 @@ public class Statement {
                         return key;
                     }
                 }
-            }
+            } else if (parts.length == 1)
+                if(parts[0].equals(varName))
+                    return key;
         }
         return null;
     }
@@ -230,7 +249,7 @@ public class Statement {
 //       }
 //    }
 
-//
+    //
     String leftArg;
     String rightArg;
     Operator operator;
@@ -244,7 +263,7 @@ public class Statement {
             if(this.operator.left=='/'){
                 clear(this.leftArg,storage.getMemories());
             }
-            write(this.leftArg,Processor.count(read(this.rightArg,storage.getMemories()),storage.getMemories()),storage.getMemories());
+            write(this.leftArg,Processor.count(rightArg,storage.getMemories()),storage.getMemories());
             if(this.operator.right.equals('/')){
                 clear(this.rightArg,storage.getMemories());
             }
@@ -252,14 +271,39 @@ public class Statement {
             if(this.operator.right.equals('/')){
                 clear(rightArg,storage.getMemories());
             }
-            write(rightArg, Processor.count(read(leftArg,storage.getMemories()),storage.getMemories()),storage.getMemories());
+            write(rightArg, Processor.count(leftArg, storage.getMemories()),storage.getMemories());
             if(this.operator.left.equals('/')){
                 clear(leftArg,storage.getMemories());
             }
+        } else if(String.valueOf(this.operator.middle).contains("&=")) {
+            searchTrue(storage.getMemories(),leftArg,rightArg);
+        } else if(String.valueOf(this.operator.middle).contains("~=")) {
+            searchFalse(storage.getMemories(),leftArg,rightArg);
+        } else if(String.valueOf(this.operator.middle).contains("^=")) {
+            String tablename = null;
+            String index = null;
+            for(int i = 0; i < leftArg.length(); i++) {
+                if(leftArg.charAt(i) == '.') {
+                    tablename = leftArg.substring(0,i);
+                    index = leftArg.substring(i+1, leftArg.length());
+                    break;
+                }
+            }
+            insert(storage.getMemories(),tablename,index, rightArg);
+        } else if(String.valueOf(this.operator.middle).contains(".=")) {
+            String tablename = null;
+            String index = null;
+            for(int i = 0; i < leftArg.length(); i++) {
+                if(leftArg.charAt(i) == '.') {
+                    tablename = leftArg.substring(0,i);
+                    index = leftArg.substring(i+1, leftArg.length());
+                    break;
+                }
+            }
+            add(storage.getMemories(),tablename,index, rightArg);
         }
     }
-    //TODO: добавить специфичные для памятей методы
-//    }
+    //    }
     public String toString(){
         return leftArg.toString()+operator.toString()+rightArg.toString();
     }

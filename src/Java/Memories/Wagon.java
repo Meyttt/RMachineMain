@@ -41,6 +41,26 @@ public class Wagon implements Memory {
 
     public int size() {return this.value.size();}
 
+    @Override
+    public boolean addNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean insertNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchTrue(String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchFalse(String value) {
+        return false;
+    }
+
     boolean write(String value, String name) {
         if(Objects.equals(name, this.leftname)) {
             this.value.add(0, value);
@@ -56,7 +76,7 @@ public class Wagon implements Memory {
         return (this.value.get(0) != null && this.value.get(this.value.size()-1) != null);
     }
     @Override
-   public String read(String... args) {
+    public String read(String... args) {
         String name = args[0];
         String value = null;
         if (Objects.equals(name, this.leftname)) {

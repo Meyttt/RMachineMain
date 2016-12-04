@@ -10,4 +10,12 @@ public interface Memory {
     boolean clear();
     String getName();
     int size();
+
+    boolean addNewStr(int index, String value);
+
+    boolean insertNewStr(int index, String value);
+
+    boolean searchTrue(String value);
+
+    boolean searchFalse(String value);
 }

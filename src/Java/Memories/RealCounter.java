@@ -18,6 +18,26 @@ public class RealCounter implements Memory {
 
     public int size() { return this.size(); }
 
+    @Override
+    public boolean addNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean insertNewStr(int index, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchTrue(String value) {
+        return false;
+    }
+
+    @Override
+    public boolean searchFalse(String value) {
+        return false;
+    }
+
     boolean write(double rcounter) {
         this.rcounter = rcounter;
         return (this.rcounter != 0.0);

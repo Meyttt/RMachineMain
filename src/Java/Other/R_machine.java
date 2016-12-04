@@ -182,6 +182,8 @@ public class R_machine {
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
         statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Scotty")); //TODO
+        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Kate")); //TODO
+        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Nik")); //TODO
         ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
         armlines.add(arm12);
         Arm arm1 = new Arm("1", armlines1);
@@ -194,7 +196,11 @@ public class R_machine {
         System.out.println(table.searchTrue("Scotty"));
         System.out.println(table.searchTrue("Kirk"));
         r_machine.analyzer();
-
+        System.out.println(table.searchTrue("Kate"));
+        System.out.println(table.searchTrue("Scotty"));
+        System.out.println(table.searchTrue("Scotty"));
+        table.write( "0","Nik2");
+        System.out.println(table);
 
     }
 }

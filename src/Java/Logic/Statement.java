@@ -244,7 +244,7 @@ public class Statement {
             if(this.operator.left=='/'){
                 clear(this.leftArg,storage.getMemories());
             }
-            write(this.leftArg,Processor.count(read(this.rightArg,storage.getMemories())),storage.getMemories());
+            write(this.leftArg,Processor.count(read(this.rightArg,storage.getMemories()),storage.getMemories()),storage.getMemories());
             if(this.operator.right.equals('/')){
                 clear(this.rightArg,storage.getMemories());
             }
@@ -252,7 +252,7 @@ public class Statement {
             if(this.operator.right.equals('/')){
                 clear(rightArg,storage.getMemories());
             }
-            write(rightArg, Processor.count(read(leftArg,storage.getMemories())),storage.getMemories());
+            write(rightArg, Processor.count(read(leftArg,storage.getMemories()),storage.getMemories()),storage.getMemories());
             if(this.operator.left.equals('/')){
                 clear(leftArg,storage.getMemories());
             }

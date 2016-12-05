@@ -18,15 +18,14 @@ public class Counter implements Memory {
     public int size() { return this.size(); }
 
     @Override
-    public boolean addNewStr(int index, String value) {
+    public boolean addNewStr(String index, String value) {
         return false;
     }
 
     @Override
-    public boolean insertNewStr(int index, String value) {
+    public boolean insertNewStr(String index, String value) {
         return false;
     }
-
     @Override
     public boolean searchTrue(String value) {
         return false;

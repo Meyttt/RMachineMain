@@ -1,7 +1,7 @@
 package Memories;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -10,13 +10,14 @@ import java.util.Objects;
 public class Table implements Memory {
 
     private String tname;
-    ArrayList<ArrayList<String>> table = new ArrayList<>();
-    ArrayList<String> colnames = new ArrayList<>();
+    ArrayList<HashMap<String,String>> table = new ArrayList<>();
+//    ArrayList<String> colnames = new ArrayList<>();
+    HashMap<String,String> colnames = new HashMap<>();
     private int strnumber=0;
     private int colnumber=0;
 //    private int columns;
 
-    public Table(String tname, ArrayList<ArrayList<String>> table, ArrayList<String> colnames) {
+    public Table(String tname, ArrayList<HashMap<String,String>> table, HashMap<String,String> colnames) {
         this.tname = tname;
         if(table!=null) {
             this.table = table;
@@ -24,7 +25,7 @@ public class Table implements Memory {
         this.colnames = colnames;
     }
 
-    public Table(String tname, ArrayList<String> colnames) {
+    public Table(String tname, HashMap<String,String> colnames) {
         this.tname = tname;
         this.colnames = colnames;
         for(int count = 0; count < 1; count++) {
@@ -32,13 +33,14 @@ public class Table implements Memory {
 //            table.get(count).add("");
         }
     }
-    public Table(String tname,ArrayList<ArrayList<String>> table,String[] colnames) {
+    public Table(String tname/*, ArrayList<HashMap<String,String>> table,String[] colnames*/) {
         this.tname = tname;
-        if(table!=null) {
-            this.table = table;
-        }
-        ArrayList<String> list = new ArrayList<>();
-        Collections.addAll(list, colnames);
+//        if(table!=null) {
+//            this.table = table;
+//        }
+        HashMap<String,String> list = new HashMap<>();
+//        for()
+//        Collections.addAll(list, colnames);
         this.colnames = list;
     }
 
@@ -58,11 +60,12 @@ public class Table implements Memory {
         return colnumber;
     }
 
-    ArrayList getString(int num) {
+    HashMap<String, String> getString(int num) {
         return this.table.get(num);
     }
 
     public int size() { return this.table.size(); }
+
     //TODO: для работы с памятью нам необходимо чтение по столбцу. Иначе говоря, обращаться по имени столбца к текущей строке
     public String read(String... args) {
         return this.table.get(strnumber).get(Integer.parseInt(args[0]));
@@ -71,11 +74,11 @@ public class Table implements Memory {
     @Override
     public boolean write(String... args) {
         if(this.table.size()==0){
-            this.table.add(new ArrayList<>());
+            this.table.add(new HashMap<String, String>());
         }
-        this.table.get(strnumber).add(Integer.parseInt(args[0]), args[1]);
+        this.table.get(strnumber).put(args[0], args[1]);
 
-        return (this.table.get(strnumber).get(Integer.parseInt(args[0])) != null);
+        return (this.table.get(strnumber).get(args[0]) != null);
     }
 
     @Override
@@ -89,22 +92,22 @@ public class Table implements Memory {
 //        return (this.table.get(strnumber).get(colnumber) != null);
 //    }
     @Override
-    public boolean addNewStr(int index, String value) {
+    public boolean addNewStr(String index, String value) {
         this.strnumber++;
-        this.table.add(strnumber,new ArrayList<>());
-        this.table.get(strnumber).add(index, value);
+        this.table.add(strnumber,new HashMap<String,String>());
+        this.table.get(strnumber).put(index, value);
         return (this.table.get(strnumber).get(index) != null);
     }
     @Override
-    public boolean insertNewStr(int index, String value) {
+    public boolean insertNewStr(String index, String value) {
         if(strnumber == 0) {
-            this.table.add(0,new ArrayList<>());
-            this.table.get(0).add(index, value);
+            this.table.add(0,new HashMap<String,String>());
+            this.table.get(0).put(index, value);
             return (this.table.get(0).get(index) != null);
         }
         this.strnumber--;
         this.table.add(strnumber,colnames);
-        this.table.get(strnumber).add(index, value);
+        this.table.get(strnumber).put(index, value);
         return (this.table.get(strnumber).get(index) != null);
     }
     @Override

@@ -11,9 +11,14 @@ public interface Memory {
     String getName();
     int size();
 
-    boolean addNewStr(int index, String value);
 
-    boolean insertNewStr(int index, String value);
+    //    public boolean write(String value) {
+//        this.table.get(strnumber).add(colnumber, value);
+//        return (this.table.get(strnumber).get(colnumber) != null);
+//    }
+    boolean addNewStr(String index, String value);
+
+    boolean insertNewStr(String index, String value);
 
     boolean searchTrue(String value);
 

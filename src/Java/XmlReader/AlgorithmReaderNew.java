@@ -64,7 +64,7 @@ public class AlgorithmReaderNew {
                                 }
                             }
                         }
-                        memoryHashMap.put(name,new Table(name,colNames));
+                        memoryHashMap.put(name,new Table(name/*,colNames*/));
                         break;
                 }
             }

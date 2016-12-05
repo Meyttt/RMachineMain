@@ -23,12 +23,12 @@ public class Register implements Memory {
     public int size() { return this.value.length(); }
 
     @Override
-    public boolean addNewStr(int index, String value) {
+    public boolean addNewStr(String index, String value) {
         return false;
     }
 
     @Override
-    public boolean insertNewStr(int index, String value) {
+    public boolean insertNewStr(String index, String value) {
         return false;
     }
 

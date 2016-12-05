@@ -2,7 +2,6 @@ package Other;
 
 import Memories.Counter;
 import Memories.Register;
-import Memories.Table;
 import Memories.Wagon;
 
 import java.util.*;
@@ -145,13 +144,13 @@ public class TestClass {
 
     }
 
-    public static void main(String[] args) {
-        Table table = new Table("tab",null,new String[]{"Type","Value"});
-        table.write("Word","thisWillBeIgnored");
-        System.out.println(table);
-//        ArrayList<String> testList = new ArrayList<>();
-//        System.out.println(testList.get(0));
-
-    }
+//    public static void main(String[] args) {
+//        Table table = new Table("tab",null,new String[]{"Type","Value"});
+//        table.write("Word","thisWillBeIgnored");
+//        System.out.println(table);
+////        ArrayList<String> testList = new ArrayList<>();
+////        System.out.println(testList.get(0));
+//
+//    }
 
 }

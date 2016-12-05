@@ -153,7 +153,7 @@ public class R_machine {
         Wagon wag1 = new Wagon("LW","RW", null);
         Register reg1 = new Register("reg1",null);
         Register reg2 = new Register("reg2", null);
-        Table table = new Table("tab",null,new String[]{"0","1"});
+        Table table = new Table("tab"/*,new String[]{"0","1"}*/);
 
 
         memories.put(reg1.getname(),reg1);
@@ -182,7 +182,7 @@ public class R_machine {
         ArrayList<ArmLine> armlines1 = new ArrayList<>();
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
-        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Scotty"));
+        statements12.add(new Statement("tab.first",Statement.getOperator("<-"),"Scotty"));
         statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Kate"));
         statements12.add(new Statement("tab.0",Statement.getOperator("^="),"Nik"));
         statements12.add(new Statement("tab.0",Statement.getOperator(".="),"Spok"));

@@ -165,12 +165,12 @@ public class Statement {
 
     public void add(HashMap<String, Memory> memories, String varName, String index, String value) {
         if(findTable(varName, memories)!=null)
-            memories.get(varName).addNewStr(Integer.parseInt(index), value);
+            memories.get(varName).addNewStr(index, value);
     }
 
     public void insert(HashMap<String, Memory> memories, String varName, String index, String value) {
         if(findTable(varName, memories)!=null)
-            memories.get(varName).insertNewStr(Integer.parseInt(index), value);
+            memories.get(varName).insertNewStr(index, value);
     }
 
     public void searchTrue(HashMap<String, Memory> memories, String varName, String value) {

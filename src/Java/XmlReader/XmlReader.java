@@ -94,7 +94,7 @@ public class XmlReader {
                                         }
 
                                     }
-                                    memoryMap.put(node.getAttributes().getNamedItem("name").getNodeValue(),new Table(node.getAttributes().getNamedItem("name").getNodeValue(),rows,columnNames));
+                                    memoryMap.put(node.getAttributes().getNamedItem("name").getNodeValue(),new Table(node.getAttributes().getNamedItem("name").getNodeValue()/*,rows,columnNames*/));
                                     break;
 
                             }

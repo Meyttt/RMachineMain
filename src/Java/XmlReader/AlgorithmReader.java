@@ -61,7 +61,7 @@ public class AlgorithmReader {
                             }
                         }
                     }
-                    memoriesMap.put(name, new Table(name, null, colnames));
+                    memoriesMap.put(name, new Table(name/*, null, colnames*/));
                     break;
                 }
             }

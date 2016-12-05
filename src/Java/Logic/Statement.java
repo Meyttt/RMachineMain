@@ -208,7 +208,7 @@ public class Statement {
         return varName;
     }
 
-    String findWagon(String varName, HashMap<String, Memory> memories){
+    public String findWagon(String varName, HashMap<String, Memory> memories){
         Set<String> keys = memories.keySet();
         for(String key:keys) {
             String[] parts = key.split("\\*");
@@ -225,7 +225,7 @@ public class Statement {
         return null;
     }
 
-    String findTable(String varName, HashMap<String, Memory> memories) {
+    public String findTable(String varName, HashMap<String, Memory> memories) {
         Set<String> keys = memories.keySet();
         for(String key: keys) {
             if(Objects.equals(key, varName))
@@ -281,7 +281,7 @@ public class Statement {
             if(this.operator.right.equals('/')){
                 clear(this.rightArg,storage.getMemories());
             }
-        }else if(this.operator.middle.toString().contains(">")) {
+        }else if(String.valueOf(this.operator.middle).contains(">")) {
             if(this.operator.right.equals('/')){
                 clear(rightArg,storage.getMemories());
             }

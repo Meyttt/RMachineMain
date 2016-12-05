@@ -68,7 +68,7 @@ public class Table implements Memory {
 
     //TODO: для работы с памятью нам необходимо чтение по столбцу. Иначе говоря, обращаться по имени столбца к текущей строке
     public String read(String... args) {
-        return this.table.get(strnumber).get(Integer.parseInt(args[0]));
+        return this.table.get(strnumber).get(args[0]);
     }
 
     @Override

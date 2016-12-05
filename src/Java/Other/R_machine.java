@@ -158,13 +158,15 @@ public class R_machine {
 
         memories.put(reg1.getname(),reg1);
         memories.put(reg2.getname(),reg2);
-        memories.put("LW",wag1);
+        memories.put("LW*RW",wag1);
         memories.put("tab",table);
 
 
         ArrayList<ArmLine> armlines = new ArrayList<>();
         ArrayList<Statement> statements01 = new ArrayList<>();
         statements01.add(new Statement("LW",Statement.getOperator("<-"),"Cat"));
+        statements01.add(new Statement("RW",Statement.getOperator("<-"),"Dog"));
+        statements01.add(new Statement("LW*RW",Statement.getOperator("<-"),"Animals"));
         statements01.add(new Statement("reg2",Statement.getOperator("<-"),"13/3-6"));
         ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
@@ -180,12 +182,14 @@ public class R_machine {
         ArrayList<ArmLine> armlines1 = new ArrayList<>();
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
-        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Scotty")); //TODO
-        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Kate")); //TODO
-        statements12.add(new Statement("tab.0",Statement.getOperator("^="),"Nik")); //TODO
-        statements12.add(new Statement("tab.0",Statement.getOperator(".="),"Spok")); //TODO
-        statements12.add(new Statement("tab.1",Statement.getOperator("<-"),"Nik")); //TODO
-        statements12.add(new Statement("tab.0",Statement.getOperator("&="),"Nik")); //TODO
+        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Scotty"));
+        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Kate"));
+        statements12.add(new Statement("tab.0",Statement.getOperator("^="),"Nik"));
+        statements12.add(new Statement("tab.0",Statement.getOperator(".="),"Spok"));
+        statements12.add(new Statement("tab.1",Statement.getOperator("<-"),"Nik"));
+        statements12.add(new Statement("tab.0",Statement.getOperator("&="),"Nik"));
+        statements12.add(new Statement("tab.0",Statement.getOperator("|-"),"tab.0 = "));
+        statements12.add(new Statement("reg1",Statement.getOperator("/-|"),"Input value of reg1: "));
         ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
         armlines.add(arm12);
         Arm arm1 = new Arm("1", armlines1);
@@ -193,16 +197,7 @@ public class R_machine {
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-//        table.write("Scotty");
-//        table.write("Khan");
-        System.out.println(table.searchTrue("Scotty"));
-        System.out.println(table.searchTrue("Kirk"));
         r_machine.analyzer();
-        System.out.println(table.searchTrue("Kate"));
-        System.out.println(table.searchTrue("Scotty"));
-        System.out.println(table.searchTrue("Scotty"));
-        table.write("0","Nik2");
-        System.out.println(table);
 
     }
 }

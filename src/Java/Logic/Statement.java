@@ -7,6 +7,7 @@ import SPO.Processor;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -186,7 +187,20 @@ public class Statement {
         if(memories.containsKey(varName)){
             return memories.get(varName).read();
         }else{
-            String key=findWagon(varName,memories);
+            String tablename = null;
+            String index = null;
+            for(int i = 0; i < varName.length(); i++) {
+                if(varName.charAt(i) == '.') {
+                    tablename = varName.substring(0,i);
+                    index = varName.substring(i+1, varName.length());
+                    break;
+                }
+            }
+            String key = findTable(tablename, memories);
+            if(key!=null) {
+                return memories.get(key).read(index);
+            }
+            key=findWagon(varName,memories);
             if(key!=null){
                 return memories.get(key).read(varName);
             }
@@ -301,6 +315,21 @@ public class Statement {
                 }
             }
             add(storage.getMemories(),tablename,index, rightArg);
+        } else if(String.valueOf(this.operator.middle).contains("|-")) {
+            System.out.println(rightArg.toString() + read(leftArg,storage.getMemories()));
+            if(this.operator.left.equals('/')){
+                clear(this.rightArg,storage.getMemories());
+            }
+        } else if(String.valueOf(this.operator.middle).contains("-|")) {
+            if(this.operator.left=='/'){
+                clear(this.leftArg,storage.getMemories());
+            }
+            Scanner in = new Scanner(System.in);
+            if(rightArg != null) {
+                System.out.print(rightArg.toString());
+            }
+            String value = in.nextLine();
+            write(this.leftArg,Processor.count(value,storage.getMemories()),storage.getMemories());
         }
     }
     //    }

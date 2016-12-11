@@ -269,11 +269,10 @@ public class Condition {
     }
 
     public String toString(){
-//        if(text==null){
-//            return "if: " +alphabet+" then goto: "+endArmNumber;
-//        }else if(alphabet==null){
-//            return "if: " +text+" then goto: "+endArmNumber;
-//        }
+        if(this.memoryright != null && this.oper != null && this.memoryleft != null) return (this.memoryleft+ this.oper+ this.memoryright);
+        if(this.alphabet != null) return this.alphabet.getFullname();
+        if(this.text != null) return this.text;
+        if(this.memory != null) return this.memory.toString();
         return null;
     }
 

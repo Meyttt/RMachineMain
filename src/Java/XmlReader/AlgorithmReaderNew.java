@@ -1,7 +1,9 @@
 package XmlReader;
 
+import Logic.Arm;
 import Logic.ArmLine;
 import Logic.Condition;
+import Logic.Statement;
 import Memories.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -20,6 +22,8 @@ import java.util.HashMap;
  * Created by master on 21.11.2016.
  */
 public class AlgorithmReaderNew {
+    HashMap<String,Memory> memoryHashMap;
+    HashMap<String,Arm> arms = new HashMap<>();
     public void readAll(){
 
     }
@@ -48,28 +52,27 @@ public class AlgorithmReaderNew {
                         String rname = currentMemory.getAttributes().getNamedItem("rightName").getNodeValue();
                         memoryHashMap.put(lname+"*"+rname, new Wagon(lname,rname,null));
                         break;
-                    case "Table":
-                        name = currentMemory.getAttributes().getNamedItem("name").getNodeValue();
-                        ArrayList<String> colNames = new ArrayList<>();
-                        NodeList tableChildren = currentMemory.getChildNodes();
-                        for(int j=0; j<tableChildren.getLength();j++){
-                            if(tableChildren.item(j).getNextSibling()!=null){
-                                if(tableChildren.item(j).getNextSibling().getNodeName()=="columnsName"){
-                                    NodeList columnChildren=tableChildren.item(j).getNextSibling().getChildNodes();
-                                    for(int k=0; k<columnChildren.getLength()&&columnChildren.item(k)!=null;k++){
-                                        if(columnChildren.item(k).getNodeName().equals("column")){
-                                            colNames.add(columnChildren.item(k).getFirstChild().getNodeValue());
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        memoryHashMap.put(name,new Table(name/*,colNames*/));
-                        break;
+//                    case "Table":
+//                        name = currentMemory.getAttributes().getNamedItem("name").getNodeValue().replace("\"","");
+//                        ArrayList<String> colNames = new ArrayList<>();
+//                        NodeList tableChildren = currentMemory.getChildNodes();
+//                        for(int j=0; j<tableChildren.getLength();j++){
+//                            if(tableChildren.item(j).getNextSibling()!=null){
+//                                if(tableChildren.item(j).getNextSibling().getNodeName()=="columnsName"){
+//                                    NodeList columnChildren=tableChildren.item(j).getNextSibling().getChildNodes();
+//                                    for(int k=0; k<columnChildren.getLength()&&columnChildren.item(k)!=null;k++){
+//                                        if(columnChildren.item(k).getNodeName().equals("column")){
+//                                            colNames.add(columnChildren.item(k).getFirstChild().getNodeValue());
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        break;
                 }
             }
         }
-
+        this.memoryHashMap=memoryHashMap;
         return memoryHashMap;
     }
     public void readAlgorithm() throws ParserConfigurationException, IOException, SAXException {
@@ -85,10 +88,12 @@ public class AlgorithmReaderNew {
         }
         NodeList algorithmNodeList = document.getElementsByTagName("arm");
         for (int m=0;m<algorithmNodeList.getLength();m++){
+            String currentNumber =algorithmNodeList.item(m).getAttributes().getNamedItem("begin").getNodeValue();
+            ArrayList<ArmLine> armLines = new ArrayList<>();
             NodeList edgesList = algorithmNodeList.item(m).getChildNodes();
             for (int n=0;n<edgesList.getLength();n++){
                 Condition condition = null;
-                ArrayList<ArmLine> armLines = new ArrayList<>();
+                ArrayList<Statement> statements=new ArrayList<>();
                 if(edgesList.item(n).hasChildNodes()){
                     String endNumber=(edgesList.item(n).getAttributes().getNamedItem("end").getNodeValue());
                     NodeList insideEdgeList = edgesList.item(n).getChildNodes();
@@ -97,7 +102,7 @@ public class AlgorithmReaderNew {
                             case ("predicate"):
                                 switch (insideEdgeList.item(o).getAttributes().getNamedItem("type").getNodeValue()) {
                                     case ("alphabet"):
-                                        String alphName=insideEdgeList.item(o).getAttributes().getNamedItem("name").getNodeValue();
+                                        String alphName=insideEdgeList.item(o).getFirstChild().getNodeValue();
                                         if(alphabetHashMap.containsKey(alphName)){
                                             condition= new Condition(alphabetHashMap.get(alphName));
                                         }else{
@@ -111,33 +116,88 @@ public class AlgorithmReaderNew {
                                         }
                                         break;
                                     case("expression"):
-                                        String left,right,sign;
+                                        Memory left=null,right = null;
+                                        String sign=null;
+                                        String name="";
                                         NodeList exprArgs = insideEdgeList.item(o).getChildNodes();
                                         for (int p=0; p<exprArgs.getLength();p++){
                                             if (exprArgs.item(p).getNodeName().equals("left")) {
-                                                left=exprArgs.item(p).getAttributes().getNamedItem("value").getNodeValue();
+                                                name=exprArgs.item(p).getAttributes().getNamedItem("value").getNodeValue();
+                                                if(memoryHashMap.containsKey(name)) {
+                                                    left = memoryHashMap.get(name);
+                                                }else{
+                                                    System.err.println("Нет памяти "+ name);
+                                                }
+                                                continue;
                                             }
                                             if (exprArgs.item(p).getNodeName().equals("right")){
-                                                right= left=exprArgs.item(p).getAttributes().getNamedItem("value").getNodeValue();
+                                                name=exprArgs.item(p).getAttributes().getNamedItem("value").getNodeValue();
+                                                if(memoryHashMap.containsKey(name)){
+                                                    right=memoryHashMap.get(name);
+                                                }else{
+                                                    System.err.println("Нет памяти "+ name);
+                                                }
+                                                continue;
                                             }
-
                                             if (exprArgs.item(p).hasChildNodes()){
                                                 sign=exprArgs.item(p).getFirstChild().getNodeValue();
                                             }
                                         }
-//                                        condition= new Condition()
-
+                                        condition= new Condition(left,sign,right);
+                                        break;
+                                    case ("string"):
+                                        String text=insideEdgeList.item(o).getFirstChild().getNodeValue();
+                                        condition=new Condition(text);
+                                        break;
+                                    case ("memory"):
+                                        String memoryName=insideEdgeList.item(o).getFirstChild().getNodeValue();
+                                        Memory memory=null;
+                                        if(memoryHashMap.containsKey(memoryName)){
+                                            memory=memoryHashMap.get(memoryName);
+                                        }else{
+                                            System.err.println("Нет памяти "+ memoryName);
+                                        }
+                                        condition= new Condition(memory);
+                                        break;
                                 }
+                                break;
+                            case ("operation"):
+                                String left=null,right = null, operator = null;
+                                String name="";
+                                NodeList exprArgs = insideEdgeList.item(o).getChildNodes();
+                                for (int p=0; p<exprArgs.getLength();p++){
+                                    if (exprArgs.item(p).getNodeName().equals("left")) {
+                                        left=exprArgs.item(p).getAttributes().getNamedItem("value").getNodeValue();
+                                        continue;
+                                    }
+                                    if (exprArgs.item(p).getNodeName().equals("right")){
+                                        right=exprArgs.item(p).getAttributes().getNamedItem("value").getNodeValue();
+                                        continue;
+                                    }
+                                    if (exprArgs.item(p).hasChildNodes()){
+                                        operator=exprArgs.item(p).getFirstChild().getNodeValue();
+                                    }
+                                }
+                                statements.add(new Statement(left,new Statement.Operator(operator.toCharArray()),right));
+                                break;
+
 //
-//                                }
-                                NodeList predargs = insideEdgeList.item(o).getChildNodes();
-//                                for(int p=0; p<predargs.getLength();p++){
-//                                    System.out.println(predargs.item(p).getNodeName());
-//                                }
+//
                         }
+
                     }
+                    armLines.add(new ArmLine(currentNumber,condition,statements,endNumber));
 
                 }
+            }
+            arms.put(currentNumber,new Arm(currentNumber,armLines));
+        }
+        System.out.println(arms.size());
+        Arm arm = arms.get("0");
+        for(ArmLine armLine:arm.getLines()){
+            System.out.println("Condition: "+armLine.getCondition());
+            for(Statement statement:armLine.getStatements()){
+                System.out.println(statement);
             }
         }
     }
@@ -145,6 +205,7 @@ public class AlgorithmReaderNew {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew();
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
+
     }
 
 }

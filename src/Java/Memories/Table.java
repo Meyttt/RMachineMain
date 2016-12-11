@@ -33,6 +33,7 @@ public class Table implements Memory {
 //            table.get(count).add("");
         }
     }
+
     public Table(String tname/*, ArrayList<HashMap<String,String>> table,String[] colnames*/) {
         this.tname = tname;
 //        if(table!=null) {

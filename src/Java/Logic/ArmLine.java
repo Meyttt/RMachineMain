@@ -54,4 +54,7 @@ public class ArmLine {
 
     ArrayList<Statement> statements;
 
+    public Condition getCondition() {
+        return condition;
+    }
 }

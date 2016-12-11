@@ -11,6 +11,12 @@
 				<memory type="Counter" name="a"/>
 				<memory type="Counter" name="b"/>
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
+				<memory type="Table" name = "tname">
+					<columnsName>
+						<column>Name1</column>
+						<column>Name2</column>
+					</columnsName>
+				</memory>
 			</memory_block>
 			<alphabet>
 				<abc name="Letter" short_name="L" description="descr"></abc>
@@ -30,7 +36,7 @@
                 <edge end = "2">
                     <predicate type="expression">
 						<left value = "a"/>
-						<sign>&gt;</sign>
+						<sign>-&gt;</sign>
 						<right value = "b"/>
 					</predicate>
 					<operation>
@@ -45,7 +51,7 @@
 					</operation>
                 </edge>
 				<edge end = "3">
-					<predicate type="string">predConst</predicate>
+					<predicate type="String">perdConst</predicate>
 					<operation>
 						<left value = "ct1"/>
 						<operator>-&gt;</operator>

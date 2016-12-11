@@ -5,8 +5,12 @@ import Logic.ArmLine;
 import Logic.Condition;
 import Logic.Statement;
 import Memories.*;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -21,6 +25,8 @@ public class R_machine {
     AllStorage allStorage;
     Storage storage;
     Tape tape;
+    private Stage primaryStage;
+    private Pane rootLayout;
 
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
@@ -85,11 +91,21 @@ public class R_machine {
 //                }
 
                 if(this.tape.readCurrent()=='#'){
-                    System.out.println("Конец программы");
-                    Set<String> names = this.allStorage.storage.getMemories().keySet();
-                    for(String name:names){
-                        System.out.println(this.allStorage.storage.getMemories().get(name));
+                    try {
+                        FileWriter file = new FileWriter("D:\\Java_programs\\RMachineMain_1\\src\\data\\ResultFile.txt");
+                        String buftext = null;
+                        System.out.println("Конец программы");
+                        Set<String> names = this.allStorage.storage.getMemories().keySet();
+                        for(String name:names){
+                            buftext += this.allStorage.storage.getMemories().get(name).toString() + "\n";
+                            System.out.println(this.allStorage.storage.getMemories().get(name));
+                        }
+                        file.write(buftext);
+                        file.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+
                     return;
                 }
                 analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
@@ -178,14 +194,13 @@ public class R_machine {
         armlines.add(arm02);
         Arm arm0 = new Arm("0", armlines);
 
-
         ArrayList<ArmLine> armlines1 = new ArrayList<>();
         ArrayList<Statement> statements12 = new ArrayList<>();
         statements12.add(new Statement("reg1",Statement.getOperator("<-"),"test"));
-        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Scotty"));
-        statements12.add(new Statement("tab.0",Statement.getOperator("<-"),"Kate"));
+        statements12.add(new Statement("tab.engineer",Statement.getOperator("<-"),"Scotty"));
+        statements12.add(new Statement("tab.woman",Statement.getOperator("<-"),"Kate"));
         statements12.add(new Statement("tab.0",Statement.getOperator("^="),"Nik"));
-        statements12.add(new Statement("tab.0",Statement.getOperator(".="),"Spok"));
+        statements12.add(new Statement("tab.commander",Statement.getOperator(".="),"Spok"));
         statements12.add(new Statement("tab.key",Statement.getOperator("<-"),"Nik"));
 //        statements12.add(new Statement("tab.Name",Statement.getOperator("&="),"Nik"));
         statements12.add(new Statement("tab.key",Statement.getOperator("|-"),"tab.key = "));
@@ -201,4 +216,5 @@ public class R_machine {
         r_machine.analyzer();
 
     }
+
 }

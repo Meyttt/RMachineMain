@@ -70,7 +70,6 @@ public class Condition {
 
 //  2. 3 пункт: сравниваем ленту ввода с памятью.
     private boolean compare(Memory memory, Tape tape) {
-
         for(int i = 0; i < memory.read().length(); i++) {
             if (!(memory.read().charAt(i) == tape.read())) {
                 aBoolean = false;
@@ -83,9 +82,8 @@ public class Condition {
 
 //  3. Предикат синтерм: сверка текущего символа входной ленты с любым символом данного алфавита
     private boolean compare(Alphabet alphabet, Tape tape) {
-        char buf = tape.read();
         for (int i = 0; i < alphabet.read().length; i++) {
-            if (alphabet.read()[i] == buf) {
+            if (alphabet.read()[i] == tape.readCurrent()) {
                 aBoolean = true;
                 return aBoolean;
             }
@@ -101,8 +99,7 @@ public class Condition {
             String str;
             int count = 0;
             for(int i = 0; i < memory.size(); i++) {
-                if(memory.read().charAt(i) == tape.read()){}
-                else {
+                if(memory.read().charAt(i) != tape.read()){
                     aBoolean = false;
                     return aBoolean;
                 }
@@ -111,24 +108,23 @@ public class Condition {
             return aBoolean;
         } else if (ch == '?') {
             String buf = null;
-            while (buf != memory.read() || tape.read() != null) {
-                char cursymbol = tape.read();
-                int count = 0;
+            aBoolean = false;
+            while (tape.readCurrent() != null) {
                 for (int i = 0; i < tape.size(); i++) {
-                    if(memory.read().charAt(i) != cursymbol) {}
-                    else  {
-                        buf += cursymbol;
+                    if(memory.read().charAt(0) == tape.readCurrent()) {
                         break;
+                    } else {
+                        tape.read();
                     }
                 }
                 for(int j = 0; j < memory.size(); j++) {
-                    if (memory.read().charAt(j) == (cursymbol = tape.read())) {
-                        buf += cursymbol;
+                    if (memory.read().charAt(j) == tape.readCurrent()) {
+                        buf += tape.read();
                     }
                     else break;
                 }
+                if(Objects.equals(buf, memory.read())) aBoolean = true;
             }
-            aBoolean = true;
             return aBoolean;
         }
         System.out.println("Error. Wrong symbol-sign.");
@@ -199,6 +195,79 @@ public class Condition {
         }
         return aBoolean;
     }
+
+    private boolean compare(String strleft, String oper, String strright) {
+        switch (oper) {
+            case "==":
+                aBoolean = (Objects.equals(strleft, strright));
+                break;
+            case "!=":
+                aBoolean = (!Objects.equals(strleft, strright));
+                break;
+            case  "<":
+                aBoolean = (new Integer(strleft) < new Integer(strright));
+                break;
+            case "<=":
+                aBoolean = (new Integer(strleft) <= new Integer(strright));
+                break;
+            case  ">":
+                aBoolean = (new Integer(strleft) > new Integer(strright));
+                break;
+            case ">=":
+                aBoolean = (new Integer(strleft) >= new Integer(strright));
+                break;
+        }
+        return aBoolean;
+    }
+
+    private boolean compare(Memory memoryleft, String oper, String strright) {
+        switch (oper) {
+            case "==":
+                aBoolean = (Objects.equals(memoryleft.read(), strright));
+                break;
+            case "!=":
+                aBoolean = (!Objects.equals(memoryleft.read(), strright));
+                break;
+            case  "<":
+                aBoolean = (new Integer(memoryleft.read()) < new Integer(strright));
+                break;
+            case "<=":
+                aBoolean = (new Integer(memoryleft.read()) <= new Integer(strright));
+                break;
+            case  ">":
+                aBoolean = (new Integer(memoryleft.read()) > new Integer(strright));
+                break;
+            case ">=":
+                aBoolean = (new Integer(memoryleft.read()) >= new Integer(strright));
+                break;
+        }
+        return aBoolean;
+    }
+
+    private boolean compare(String strleft, String oper, Memory memoryright) {
+        switch (oper) {
+            case "==":
+                aBoolean = (Objects.equals(strleft, memoryright.read()));
+                break;
+            case "!=":
+                aBoolean = (!Objects.equals(strleft, memoryright.read()));
+                break;
+            case  "<":
+                aBoolean = (new Integer(strleft) < new Integer(memoryright.read()));
+                break;
+            case "<=":
+                aBoolean = (new Integer(strleft) <= new Integer(memoryright.read()));
+                break;
+            case  ">":
+                aBoolean = (new Integer(strleft) > new Integer(memoryright.read()));
+                break;
+            case ">=":
+                aBoolean = (new Integer(strleft) >= new Integer(memoryright.read()));
+                break;
+        }
+        return aBoolean;
+    }
+
     public String toString(){
 //        if(text==null){
 //            return "if: " +alphabet+" then goto: "+endArmNumber;

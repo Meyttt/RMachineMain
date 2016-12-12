@@ -90,7 +90,7 @@ public class AlgorithmReaderNew {
         for(int m=0; m<alphabetsNodeList.getLength();m++){
             alphabetHashMap.put(alphabetsNodeList.item(m).getAttributes().getNamedItem("name").getNodeValue(),
                     new Alphabet(alphabetsNodeList.item(m).getAttributes().getNamedItem("name").getNodeValue(),alphabetsNodeList.item(m).getAttributes().getNamedItem("short_name").getNodeValue(),
-                            alphabetsNodeList.item(m).getAttributes().getNamedItem("description").getNodeValue().toCharArray()));
+                            alphabetsNodeList.item(m).getFirstChild().getNodeValue().toCharArray()));
         }
         NodeList algorithmNodeList = document.getElementsByTagName("arm");
         for (int m=0;m<algorithmNodeList.getLength();m++){

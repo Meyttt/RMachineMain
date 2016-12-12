@@ -13,8 +13,8 @@
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
 			</memory_block>
 			<alphabet>
-				<abc name="Letter" short_name="L" description="cal"></abc>
-				<abc name="Letter1" short_name="L1" description="descr1"></abc>
+				<abc name="Letter" short_name="L">cal</abc>
+				<abc name="Letter1" short_name="L1">descr1</abc>
 			</alphabet>
 		</descriptive_part>
 		<alg>

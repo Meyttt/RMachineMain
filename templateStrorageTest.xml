@@ -23,12 +23,12 @@
                     <predicate type="string">*</predicate>
 					<operation>
 						<left value = "123"/>
-						<operator>-&gt;</operator>
+						<operator>-></operator>
 						<right value ="a"/>
 					</operation>
 					<operation>
 						<left value = "120"/>
-						<operator>-&gt;</operator>
+						<operator>-></operator>
 						<right value ="b"/>
 					</operation>
                 </edge>

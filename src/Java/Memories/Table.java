@@ -8,7 +8,7 @@ import java.util.Objects;
  * Created by master on 24.10.2016.
  */
 public class Table implements Memory {
-
+//TODO: в write() передаются аргументы в неправильном порядке: сначала должно быть значение, потом имя
     private String tname;
     ArrayList<HashMap<String,String>> table = new ArrayList<>();
 //    ArrayList<String> colnames = new ArrayList<>();

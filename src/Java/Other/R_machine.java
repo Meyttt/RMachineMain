@@ -89,8 +89,8 @@ public class R_machine {
 //                    }
 //                    return;
 //                }
-
-                if(this.tape.readCurrent()=='#'){
+                char tapeCurrent=this.tape.readCurrent();
+                if(tapeCurrent=='#'){
                     try {
                         FileWriter file = new FileWriter("D:\\Java_programs\\RMachineMain_1\\src\\data\\ResultFile.txt");
                         String buftext = null;
@@ -109,6 +109,7 @@ public class R_machine {
                     return;
                 }
                 analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
+                return;
             }
         }
 
@@ -129,8 +130,8 @@ public class R_machine {
                 for(Statement statement:line.getStatements()){
                     statement.doStatement(storage,tape);
                 }
-
-                if(this.tape.readCurrent()=='#'){
+                char tapeCurrent=this.tape.readCurrent();
+                if(tapeCurrent=='#'){
                     System.out.println("Конец программы");
                     Set<String> names = this.allStorage.storage.getMemories().keySet();
                     for(String name:names){
@@ -148,6 +149,7 @@ public class R_machine {
 //                    return;
 //                }
                 analyzer(endNumber);
+                return;
             }
         }
 

@@ -83,7 +83,7 @@ public class Condition {
 //  3. Предикат синтерм: сверка текущего символа входной ленты с любым символом данного алфавита
     private boolean compare(Alphabet alphabet, Tape tape) {
         for (int i = 0; i < alphabet.read().length; i++) {
-            if (alphabet.read()[i] == tape.readCurrent()) {
+            if (alphabet.read()[i] == tape.read()) {
                 aBoolean = true;
                 return aBoolean;
             }

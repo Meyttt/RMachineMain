@@ -21,7 +21,7 @@ public class Tape {
             charsList.add(ch);
         }
         this.tape=tapeValue.toCharArray();
-        this.counter=-1;
+        this.counter=0;
     }
 //    Iterator<Character> it;
     public Tape(char[] tape) {
@@ -32,7 +32,7 @@ public class Tape {
 
 
     public Character read(){
-        return tape[++this.counter]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
+        return tape[this.counter++]; // ОБНОВЛЕНИЕ: Я же правильно понимаю, что указатель тут тоже перемещается?
     }
     public Character readCurrent(){
         return tape[this.counter];

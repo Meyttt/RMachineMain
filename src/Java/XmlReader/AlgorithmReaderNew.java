@@ -5,6 +5,10 @@ import Logic.ArmLine;
 import Logic.Condition;
 import Logic.Statement;
 import Memories.*;
+import Other.AllStorage;
+import Other.R_machine;
+import Other.Storage;
+import Other.Tape;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,6 +28,7 @@ import java.util.HashMap;
 public class AlgorithmReaderNew {
     HashMap<String,Memory> memoryHashMap;
     HashMap<String,Arm> arms = new HashMap<>();
+    HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
     public void readAll(){
 
     }
@@ -32,7 +37,7 @@ public class AlgorithmReaderNew {
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         f.setValidating(false);
         DocumentBuilder builder = f.newDocumentBuilder();
-        Document document = builder.parse(new File("templateStrorageNew.xml"));
+        Document document = builder.parse(new File("templateStrorageTest.xml"));
         NodeList memoriesNodeList =document.getElementsByTagName("memory_block").item(0).getChildNodes();
         for (int i=0; i<memoriesNodeList.getLength();i++){
             if (memoriesNodeList.item(i).getNodeName()=="memory"){
@@ -76,15 +81,16 @@ public class AlgorithmReaderNew {
         return memoryHashMap;
     }
     public void readAlgorithm() throws ParserConfigurationException, IOException, SAXException {
-        HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
+        alphabetHashMap = new HashMap<>();
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         f.setValidating(false);
         DocumentBuilder builder = f.newDocumentBuilder();
-        Document document = builder.parse(new File("templateStrorageNew.xml"));
+        Document document = builder.parse(new File("templateStrorageTest.xml"));
         NodeList alphabetsNodeList =document.getElementsByTagName("abc");
         for(int m=0; m<alphabetsNodeList.getLength();m++){
             alphabetHashMap.put(alphabetsNodeList.item(m).getAttributes().getNamedItem("name").getNodeValue(),
-                    new Alphabet(alphabetsNodeList.item(m).getAttributes().getNamedItem("name").getNodeValue(),alphabetsNodeList.item(m).getAttributes().getNamedItem("short_name").getNodeValue(),null));
+                    new Alphabet(alphabetsNodeList.item(m).getAttributes().getNamedItem("name").getNodeValue(),alphabetsNodeList.item(m).getAttributes().getNamedItem("short_name").getNodeValue(),
+                            alphabetsNodeList.item(m).getAttributes().getNamedItem("description").getNodeValue().toCharArray()));
         }
         NodeList algorithmNodeList = document.getElementsByTagName("arm");
         for (int m=0;m<algorithmNodeList.getLength();m++){
@@ -192,19 +198,16 @@ public class AlgorithmReaderNew {
             }
             arms.put(currentNumber,new Arm(currentNumber,armLines));
         }
-        System.out.println(arms.size());
-        Arm arm = arms.get("0");
-        for(ArmLine armLine:arm.getLines()){
-            System.out.println("Condition: "+armLine.getCondition());
-            for(Statement statement:armLine.getStatements()){
-                System.out.println(statement);
-            }
-        }
     }
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew();
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
+        Tape tape = new Tape("d#");
+        Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
+        AllStorage allStorage = new AllStorage(storage,tape);
+        R_machine r_machine = new R_machine(allStorage);
+        r_machine.analyzer();
 
     }
 

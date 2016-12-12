@@ -13,20 +13,27 @@
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
 			</memory_block>
 			<alphabet>
-				<abc name="Letter" short_name="L" description="cal"></abc>
+				<abc name="Letter" short_name="L" description="disconnection"></abc>
 				<abc name="Letter1" short_name="L1" description="descr1"></abc>
 			</alphabet>
 		</descriptive_part>
 		<alg>
 			<arm begin = "0">
                 <edge end = "1">
-                    <predicate type="alphabet">Letter</predicate>
+                    <predicate type="string">*</predicate>
 					<operation>
-						<left value = "testStr"/>
+						<left value = "123"/>
 						<operator>-&gt;</operator>
-						<right value ="reg1"/>
+						<right value ="a"/>
+					</operation>
+					<operation>
+						<left value = "120"/>
+						<operator>-&gt;</operator>
+						<right value ="b"/>
 					</operation>
                 </edge>
+			</arm>
+			<arm begin ="1">
                 <edge end = "2">
                     <predicate type="expression">
 						<left value = "a"/>
@@ -39,8 +46,8 @@
 						<right value = "Hello World"/>
 					</operation>
 					<operation>
-						<left value =  "ct1"/>
-						<operator>-&gt;</operator>
+						<left value =  "reg2"/>
+						<operator>&lt;-</operator>
 						<right value = "reg1"/>
 					</operation>
                 </edge>
@@ -66,5 +73,20 @@
 					</operation>
 				</edge>
             </arm>
+			<arm begin = "2">
+				<edge end = "4">
+					<predicate type="alphabet">Letter</predicate>
+					<operation>
+						<left value = "42"/>
+						<operator>-&gt;</operator>
+						<right value ="a"/>
+					</operation>
+					<operation>
+						<left value = "24"/>
+						<operator>-&gt;</operator>
+						<right value ="b"/>
+					</operation>
+				</edge>
+			</arm>
 		</alg>
 	</r-pro>

@@ -77,9 +77,9 @@ public class Table implements Memory {
         if(this.table.size()==0){
             this.table.add(new HashMap<String, String>());
         }
-        this.table.get(strnumber).put(args[0], args[1]);
+        this.table.get(strnumber).put(args[1], args[0]);
 
-        return (this.table.get(strnumber).get(args[0]) != null);
+        return (this.table.get(strnumber).get(args[1]) != null);
     }
 
     @Override

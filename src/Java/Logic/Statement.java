@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
+import static gui.window.makery.address.model.ProgramWindow.writeInWindow;
+
 /**
  * Левая и правая часть - строки, их надо парсить
  * Оператор представлен массивом из 4 символов
@@ -150,7 +152,7 @@ public class Statement {
             }
             String key = findTable(tablename, memories);
             if(key!=null) {
-                memories.get(key).write(index,value);
+                memories.get(key).write(value,index);
                 return;
             }
 //            }
@@ -272,6 +274,7 @@ public class Statement {
         this.operator = operator;
         this.rightArg = rightArg;
     }
+
     public void doStatement(Storage storage, Tape tape){
         if(String.valueOf(this.operator.middle).contains("<")){
             if(this.operator.left=='/'){
@@ -316,6 +319,7 @@ public class Statement {
             }
             add(storage.getMemories(),tablename,index, rightArg);
         } else if(String.valueOf(this.operator.middle).contains("|-")) {
+            writeInWindow("Hello"/*rightArg.toString() + read(leftArg,storage.getMemories()).toString()*/);
             System.out.println(rightArg.toString() + read(leftArg,storage.getMemories()));
             if(this.operator.left.equals('/')){
                 clear(this.rightArg,storage.getMemories());
@@ -326,6 +330,7 @@ public class Statement {
             }
             Scanner in = new Scanner(System.in);
             if(rightArg != null) {
+                writeInWindow(rightArg.toString());
                 System.out.print(rightArg.toString());
             }
             String value = in.nextLine();

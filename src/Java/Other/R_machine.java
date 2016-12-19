@@ -186,6 +186,7 @@ public class R_machine {
         statements01.add(new Statement("RW",Statement.getOperator("<-"),"Dog"));
         statements01.add(new Statement("LW*RW",Statement.getOperator("<-"),"Animals"));
         statements01.add(new Statement("reg2",Statement.getOperator("<-"),"13/3-6"));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("<-"),"Scotty"));
         ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
 

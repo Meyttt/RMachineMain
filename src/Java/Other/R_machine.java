@@ -65,10 +65,11 @@ public class R_machine {
             System.err.println("Невозможно обработать алгоритм без нулевой вершины");
             System.exit(-1);
         }
+        String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
         for(ArmLine line:lines){
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
-                String endNumber = line.getEndArmNumber();
+                endNumber=line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
                     statement.doStatement(storage,tape);
                 }
@@ -112,6 +113,9 @@ public class R_machine {
                 return;
             }
         }
+        if (endNumber==null){
+            System.err.println("Нет выхода из вершины под номером 0");
+        }
 
     }
     public void analyzer(String armNumber){
@@ -124,9 +128,10 @@ public class R_machine {
             System.exit(-1);
         }
         ArrayList<ArmLine> lines = firstArm.getLines();
+        String endNumber = null;
         for(ArmLine line:lines){
             if(line.compare(this.tape)){
-                String endNumber = line.getEndArmNumber();
+                endNumber = line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){
                     statement.doStatement(storage,tape);
                 }
@@ -151,6 +156,9 @@ public class R_machine {
                 analyzer(endNumber);
                 return;
             }
+        }
+        if (endNumber==null){
+            System.err.println("Нет выхода из вершины под номером "+armNumber);
         }
 
     }

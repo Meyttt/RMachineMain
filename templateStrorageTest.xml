@@ -13,7 +13,7 @@
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
 			</memory_block>
 			<alphabet>
-				<abc name="Letter" short_name="L">disconnection</abc>
+				<abc name="Letter" short_name="L">aisconnection</abc>
 				<abc name="Letter1" short_name="L1">descr1</abc>
 			</alphabet>
 		</descriptive_part>

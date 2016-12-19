@@ -29,6 +29,12 @@ public class AlgorithmReaderNew {
     HashMap<String,Memory> memoryHashMap;
     HashMap<String,Arm> arms = new HashMap<>();
     HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
+    String filename;
+
+    public AlgorithmReaderNew(String filename) {
+        this.filename=filename;
+    }
+
     public void readAll(){
 
     }
@@ -37,7 +43,7 @@ public class AlgorithmReaderNew {
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         f.setValidating(false);
         DocumentBuilder builder = f.newDocumentBuilder();
-        Document document = builder.parse(new File("templateStrorageTest.xml"));
+        Document document = builder.parse(new File(filename));
         NodeList memoriesNodeList =document.getElementsByTagName("memory_block").item(0).getChildNodes();
         for (int i=0; i<memoriesNodeList.getLength();i++){
             if (memoriesNodeList.item(i).getNodeName()=="memory"){
@@ -85,7 +91,7 @@ public class AlgorithmReaderNew {
         DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
         f.setValidating(false);
         DocumentBuilder builder = f.newDocumentBuilder();
-        Document document = builder.parse(new File("templateStrorageTest.xml"));
+        Document document = builder.parse(new File(filename));
         NodeList alphabetsNodeList =document.getElementsByTagName("abc");
         for(int m=0; m<alphabetsNodeList.getLength();m++){
             alphabetHashMap.put(alphabetsNodeList.item(m).getAttributes().getNamedItem("name").getNodeValue(),
@@ -200,7 +206,7 @@ public class AlgorithmReaderNew {
         }
     }
     public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-        AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew();
+        AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew("templateStrorageTest.xml");
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
         Tape tape = new Tape("d#");

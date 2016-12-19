@@ -26,7 +26,7 @@ public class ProgramWindow extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
-    private static TextArea textArea;
+    private TextArea textArea;
 
     @Override
     public void start(Stage primaryStage) {
@@ -42,12 +42,31 @@ public class ProgramWindow extends Application {
     public void writeInWindow(String value) {
         textArea.appendText(value);
     }
+
+    public TextArea getTextArea() { return textArea; }
     /**
      * Инициализирует корневой макет.
      */
 
     @FXML
     public void initRootLayout() {
+
+        rootLayout = new BorderPane();
+        // Отображаем сцену, содержащую корневой макет.
+        Scene scene = new Scene(rootLayout);
+
+        textArea = new TextArea();
+        TextField field = new TextField();
+        rootLayout.setCenter(textArea);
+        rootLayout.setBottom(field);
+        textArea.setWrapText(true);
+        textArea.appendText("Hello World\n");
+        textArea.appendText("Hello World\n");
+        textArea.setEditable(false);
+        System.out.println(rootLayout.getChildren());
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
         HashMap<String, Arm> arms= new HashMap<>();
         HashMap<String, Memory> memories = new HashMap<>();
         HashMap<String, Alphabet> alphabets = new HashMap<>();
@@ -77,7 +96,7 @@ public class ProgramWindow extends Application {
         statements01.add(new Statement("LW*RW",Statement.getOperator("<-"),"Animals"));
         statements01.add(new Statement("reg2",Statement.getOperator("<-"),"13/3-6"));
         statements01.add(new Statement("tab.engineer",Statement.getOperator("<-"),"Scotty"));
-        statements01.add(new Statement("tab.key",Statement.getOperator("|-"),"tab.Scotty = "));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("|-"),"tab.engineer = ", textArea));
         ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
 
@@ -112,21 +131,21 @@ public class ProgramWindow extends Application {
 //        FXMLLoader loader = new FXMLLoader();
 //        loader.setLocation(ProgramWindow.class.getResource("ProgramWindow.fxml"));
 //            rootLayout = (AnchorPane) loader.load();
-        rootLayout = new BorderPane();
-        // Отображаем сцену, содержащую корневой макет.
-        Scene scene = new Scene(rootLayout);
+//        rootLayout = new BorderPane();
+//        // Отображаем сцену, содержащую корневой макет.
+//        Scene scene = new Scene(rootLayout);
 
-        textArea = new TextArea();
-        TextField field = new TextField();
-        rootLayout.setCenter(textArea);
-        rootLayout.setBottom(field);
-        textArea.setWrapText(true);
-        textArea.appendText("Hello World\n");
-        textArea.appendText("Hello World\n");
-        textArea.setEditable(false);
-        System.out.println(rootLayout.getChildren());
-        primaryStage.setScene(scene);
-        primaryStage.show();
+//        textArea = new TextArea();
+//        TextField field = new TextField();
+//        rootLayout.setCenter(textArea);
+//        rootLayout.setBottom(field);
+//        textArea.setWrapText(true);
+//        textArea.appendText("Hello World\n");
+//        textArea.appendText("Hello World\n");
+//        textArea.setEditable(false);
+//        System.out.println(rootLayout.getChildren());
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
     }
 
 

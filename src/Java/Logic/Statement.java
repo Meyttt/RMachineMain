@@ -4,19 +4,20 @@ import Memories.Memory;
 import Other.Storage;
 import Other.Tape;
 import SPO.Processor;
+import javafx.scene.control.TextArea;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
-import static gui.window.makery.address.model.ProgramWindow.writeInWindow;
-
 /**
  * Левая и правая часть - строки, их надо парсить
  * Оператор представлен массивом из 4 символов
  */
 public class Statement {
+
+      private TextArea textArea;
 
 //    String lefStr, rightStr;
 //    Memories.Memory leftMem,rightMem;
@@ -269,6 +270,14 @@ public class Statement {
     String leftArg;
     String rightArg;
     Operator operator;
+
+    public Statement(String leftArg, Operator operator, String rightArg, TextArea textArea) {
+        this.leftArg = leftArg;
+        this.operator = operator;
+        this.rightArg = rightArg;
+        this.textArea = textArea;
+    }
+
     public Statement(String leftArg, Operator operator, String rightArg) {
         this.leftArg = leftArg;
         this.operator = operator;
@@ -319,7 +328,7 @@ public class Statement {
             }
             add(storage.getMemories(),tablename,index, rightArg);
         } else if(String.valueOf(this.operator.middle).contains("|-")) {
-            writeInWindow("Hello"/*rightArg.toString() + read(leftArg,storage.getMemories()).toString()*/);
+            textArea.appendText(rightArg + read(leftArg,storage.getMemories()));
             System.out.println(rightArg.toString() + read(leftArg,storage.getMemories()));
             if(this.operator.left.equals('/')){
                 clear(this.rightArg,storage.getMemories());
@@ -330,7 +339,7 @@ public class Statement {
             }
             Scanner in = new Scanner(System.in);
             if(rightArg != null) {
-                writeInWindow(rightArg.toString());
+                textArea.appendText(rightArg.toString());
                 System.out.print(rightArg.toString());
             }
             String value = in.nextLine();

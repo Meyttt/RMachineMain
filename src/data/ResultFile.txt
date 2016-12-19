@@ -1,4 +1,4 @@
-nullwagon: LW*RW; value:[Animals, Cat, Dog]
-table: tab; value: [{0=Nik}, {commander=Spok, key=Nik}, {woman=Kate, engineer=Scotty}]
-register: reg1; value: 12345
-register: reg2; value: -2Animals
+nullwagon: LW*RW; value:[Animals, Cat, Dog, Animals]
+table: tab; value: [{engineer=Scotty}]
+register: reg1; value: null
+register: reg2; value: -2

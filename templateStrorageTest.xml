@@ -13,7 +13,7 @@
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
 			</memory_block>
 			<alphabet>
-				<abc name="Letter" short_name="L">aisconnection</abc>
+				<abc name="Letter" short_name="L">Validation</abc>
 				<abc name="Letter1" short_name="L1">descr1</abc>
 			</alphabet>
 		</descriptive_part>
@@ -76,6 +76,47 @@
 			<arm begin = "2">
 				<edge end = "4">
 					<predicate type="alphabet">Letter</predicate>
+					<operation>
+						<left value = "42"/>
+						<operator>-&gt;</operator>
+						<right value ="a"/>
+					</operation>
+					<operation>
+						<left value = "24"/>
+						<operator>-&gt;</operator>
+						<right value ="b"/>
+					</operation>
+				</edge>
+				<edge end = "3">
+					<predicate type="string">perfect</predicate>
+					<operation>
+						<left value = "42"/>
+						<operator>-&gt;</operator>
+						<right value ="a"/>
+					</operation>
+					<operation>
+						<left value = "24"/>
+						<operator>-&gt;</operator>
+						<right value ="b"/>
+					</operation>
+				</edge>
+			</arm>
+			<arm begin = "3">
+				<edge end = "11">
+					<predicate type="alphabet">Letter</predicate>
+					<operation>
+						<left value = "42"/>
+						<operator>-&gt;</operator>
+						<right value ="a"/>
+					</operation>
+					<operation>
+						<left value = "24"/>
+						<operator>-&gt;</operator>
+						<right value ="b"/>
+					</operation>
+				</edge>
+				<edge end = "8">
+					<predicate type="string">perfect</predicate>
 					<operation>
 						<left value = "42"/>
 						<operator>-&gt;</operator>

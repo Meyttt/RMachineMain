@@ -130,9 +130,10 @@ public class R_machine {
             System.exit(-1);
         }
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
+        String endNumber =null;
         for(ArmLine line:lines){
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
-                String endNumber = line.getEndArmNumber();
+                endNumber = line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
                     statement.doStatement(storage,tape);
                 }
@@ -156,7 +157,7 @@ public class R_machine {
                 char tapeCurrent=this.tape.readCurrent();
                 if(tapeCurrent=='#'){
                     try {
-                        FileWriter file = new FileWriter("D:\\Java_programs\\RMachineMain_1\\src\\data\\ResultFile.txt");
+                        FileWriter file = new FileWriter("src/data/ResultFile.txt");
                         String buftext = null;
                         textArea.appendText("Конец программы\n");
                         System.out.println("Конец программы");

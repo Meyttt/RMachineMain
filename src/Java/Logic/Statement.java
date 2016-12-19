@@ -328,7 +328,7 @@ public class Statement {
             }
             add(storage.getMemories(),tablename,index, rightArg);
         } else if(String.valueOf(this.operator.middle).contains("|-")) {
-            textArea.appendText(rightArg + read(leftArg,storage.getMemories()));
+            textArea.appendText(rightArg + read(leftArg,storage.getMemories()) + "\n");
             System.out.println(rightArg.toString() + read(leftArg,storage.getMemories()));
             if(this.operator.left.equals('/')){
                 clear(this.rightArg,storage.getMemories());

@@ -181,6 +181,7 @@ public class R_machine {
         }
         if (endNumber==null){
             System.err.println("Нет выхода из вершины под номером 0");
+
         }
 
     }
@@ -244,12 +245,20 @@ public class R_machine {
                 }
                 char tapeCurrent=this.tape.readCurrent();
                 if(tapeCurrent=='#'){
-                    this.textArea.appendText("Конец программы");
-                    System.out.println("Конец программы");
-                    Set<String> names = this.allStorage.storage.getMemories().keySet();
-                    for(String name:names){
-                        this.textArea.appendText(String.valueOf(this.allStorage.storage.getMemories().get(name)));
-                        System.out.println(this.allStorage.storage.getMemories().get(name));
+                    try {
+                        this.textArea.appendText("Конец программы");
+                        System.out.println("Конец программы");
+                        Set<String> names = this.allStorage.storage.getMemories().keySet();
+                        for (String name : names) {
+                            this.textArea.appendText(String.valueOf(this.allStorage.storage.getMemories().get(name)));
+                            System.out.println(this.allStorage.storage.getMemories().get(name));
+                        }
+                    }catch(NullPointerException e1){
+                        System.out.println("Конец программы");
+                        Set<String> names = this.allStorage.storage.getMemories().keySet();
+                        for (String name : names) {
+                            System.out.println(this.allStorage.storage.getMemories().get(name));
+                        }
                     }
                     return;
                 }
@@ -268,6 +277,11 @@ public class R_machine {
         }
         if (endNumber==null){
             System.err.println("Нет выхода из вершины под номером "+armNumber);
+            System.out.println("Конец программы");
+            Set<String> names = this.allStorage.storage.getMemories().keySet();
+            for (String name : names) {
+                System.out.println(this.allStorage.storage.getMemories().get(name));
+            }
         }
 
     }

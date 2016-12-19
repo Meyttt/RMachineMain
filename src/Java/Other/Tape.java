@@ -12,7 +12,7 @@ import java.util.LinkedList;
  */
 public class Tape {
     char[] tape;
-    int counter;
+    public int counter;
 //    Queue<Character> tape=new LinkedList<>();
     public Tape(String tapeValue){
         char[] charValue = tapeValue.toCharArray();

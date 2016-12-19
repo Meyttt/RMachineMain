@@ -190,7 +190,7 @@ public class AlgorithmReaderNew {
                                         operator=exprArgs.item(p).getFirstChild().getNodeValue();
                                     }
                                 }
-                                statements.add(new Statement(left,new Statement.Operator(operator.toCharArray()),right));
+                                statements.add(new Statement(left, Statement.getOperator(operator),right));
                                 break;
 
 //
@@ -209,7 +209,7 @@ public class AlgorithmReaderNew {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew("templateStrorageTest.xml");
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
-        Tape tape = new Tape("perfect#");
+        Tape tape = new Tape("perfectapple#");
         Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
         AllStorage allStorage = new AllStorage(storage,tape);
         R_machine r_machine = new R_machine(allStorage);

@@ -58,6 +58,9 @@ public class Condition {
             aBoolean = true;
             return aBoolean;
         }
+        if(str.length()>tape.size()-tape.counter){
+            return false;
+        }
         for(int i = 0; i < str.length(); i++) {
             if (!(str.charAt(i) == tape.read())){
                 aBoolean = false;

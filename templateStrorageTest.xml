@@ -12,6 +12,7 @@
 				<memory type="Counter" name="a"/>
 				<memory type="Counter" name="b"/>
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
+				<memory type ="Table" name = "tab"/>
 			</memory_block>
 			<alphabet>
 				<abc name="Letter" short_name="L">Validation</abc>
@@ -36,6 +37,11 @@
 						<left value = "apple"/>
 						<operator>-></operator>
 						<right value ="reg3"/>
+					</operation>
+					<operation>
+						<left value = "tab.first"/>
+						<operator>.=</operator>
+						<right value ="tabvalue"/>
 					</operation>
                 </edge>
 			</arm>

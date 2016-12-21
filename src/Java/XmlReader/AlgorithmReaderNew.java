@@ -63,7 +63,11 @@ public class AlgorithmReaderNew {
                         String rname = currentMemory.getAttributes().getNamedItem("rightName").getNodeValue();
                         memoryHashMap.put(lname+"*"+rname, new Wagon(lname,rname,null));
                         break;
-//                    case "Table":
+                    case "Table":
+                        name = currentMemory.getAttributes().getNamedItem("name").getNodeValue();
+                        memoryHashMap.put(name, new Table(name));
+                        break;
+
 //                        name = currentMemory.getAttributes().getNamedItem("name").getNodeValue().replace("\"","");
 //                        ArrayList<String> colNames = new ArrayList<>();
 //                        NodeList tableChildren = currentMemory.getChildNodes();

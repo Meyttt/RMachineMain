@@ -305,6 +305,7 @@ public class Statement {
             searchTrue(storage.getMemories(),leftArg,rightArg);
         } else if(String.valueOf(this.operator.middle).contains("~=")) {
             searchFalse(storage.getMemories(),leftArg,rightArg);
+            //// TODO: 21.12.2016 а можно ли в какую-то строку( конечно, текущую) добавить столбец, если да, то как?
         } else if(String.valueOf(this.operator.middle).contains("^=")) {
             String tablename = null;
             String index = null;

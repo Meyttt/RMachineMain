@@ -22,29 +22,30 @@ import java.util.Set;
  * или не здесь
  * ОБНОВЛЕНИЕ: по замыслу здесь
  */
-public class R_machine {
+public class R_machine extends Thread implements Runnable{
     AllStorage allStorage;
     Storage storage;
     Tape tape;
     private Stage primaryStage;
     private Pane rootLayout;
     private TextArea textArea;
+    public String endNumber=null;
 
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
         this.storage=allStorage.getStorage();
         this.tape=allStorage.getTape();
     }
-    public Arm start(){
-        Set<String> armnumbers = storage.arms.keySet();
-        Arm firstArm = null;
-        if(armnumbers.contains("0")){
-            firstArm=storage.arms.get("0");
-        }else{
-            System.err.println("Нет узла с нулевым номером!");
-        }
-        return firstArm;
-    }
+//    public Arm start(){
+//        Set<String> armnumbers = storage.arms.keySet();
+//        Arm firstArm = null;
+//        if(armnumbers.contains("0")){
+//            firstArm=storage.arms.get("0");
+//        }else{
+//            System.err.println("Нет узла с нулевым номером!");
+//        }
+//        return firstArm;
+//    }
 
     public void checkArm(Arm curretArm) {
         ArrayList<ArmLine> lines = curretArm.getLines();
@@ -59,18 +60,27 @@ public class R_machine {
      * Основной цикл обхода алгортма. Без аргуентов вызывается один аз при запуске Р-машины.
      */
 
-    public void analyzer(){
-        HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
+    public void run(){
         Arm firstArm=null;
-        if(arms.containsKey("0")){
-            firstArm=arms.get("0");
+        HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
+        if(endNumber==null){
+            if(arms.containsKey("0")){
+                firstArm=arms.get("0");
+            }else{
+                System.err.println("Невозможно обработать алгоритм без нулевой вершины");
+                System.exit(-1);
+            }
         }else{
-            System.err.println("Невозможно обработать алгоритм без нулевой вершины");
-            System.exit(-1);
+            firstArm=arms.get(endNumber);
         }
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
         for(ArmLine line:lines){
+            try {
+                this.join();
+            } catch (InterruptedException e) {
+                
+            }
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 endNumber=line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
@@ -96,7 +106,7 @@ public class R_machine {
                 char tapeCurrent=this.tape.readCurrent();
                 if(tapeCurrent=='#'){
                     try {
-                        FileWriter file = new FileWriter("D:\\Java_programs\\RMachineMain_1\\src\\data\\ResultFile.txt");
+                        FileWriter file = new FileWriter("src/data/ResultFile.txt");
                         String buftext = null;
                         System.out.println("Конец программы");
                         Set<String> names = this.allStorage.storage.getMemories().keySet();
@@ -112,14 +122,15 @@ public class R_machine {
 
                     return;
                 }
-                analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
+                this.endNumber=endNumber;
+                run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }
         }
 
     }
 
-    public void analyzer(TextArea textArea){
+    public void run(TextArea textArea){
         this.textArea = textArea;
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
@@ -175,7 +186,8 @@ public class R_machine {
 
                     return;
                 }
-                analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
+                this.endNumber=endNumber;
+                run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }
         }
@@ -185,7 +197,7 @@ public class R_machine {
         }
 
     }
-//    public void analyzer(String armNumber){
+//    public void run(String armNumber){
 //        HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
 //        Arm firstArm=null;
 //        if(arms.containsKey(armNumber)){
@@ -219,14 +231,14 @@ public class R_machine {
 ////                    }
 ////                    return;
 ////                }
-//                analyzer(endNumber);
+//                run(endNumber);
 //                return;
 //            }
 //        }
 //
 //    }
 
-    public void analyzer(String armNumber){
+    public void run(String armNumber){
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
         if(arms.containsKey(armNumber)){
@@ -239,6 +251,7 @@ public class R_machine {
         String endNumber = null;
         for(ArmLine line:lines){
             if(line.compare(this.tape)){
+
                 endNumber = line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){
                     statement.doStatement(storage,tape);
@@ -271,7 +284,7 @@ public class R_machine {
 //                    }
 //                    return;
 //                }
-                analyzer(endNumber);
+                run(endNumber);
                 return;
             }
         }
@@ -347,7 +360,7 @@ public class R_machine {
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.analyzer();
+        r_machine.run();
 
     }
 

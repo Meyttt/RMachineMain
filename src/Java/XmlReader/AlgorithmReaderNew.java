@@ -209,15 +209,26 @@ public class AlgorithmReaderNew {
             arms.put(currentNumber,new Arm(currentNumber,armLines));
         }
     }
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, InterruptedException {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew("templateStrorageTest.xml");
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
-        Tape tape = new Tape("perfectapple1#");
+        Tape tape = new Tape("perfectapple#");
         Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
         AllStorage allStorage = new AllStorage(storage,tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.analyzer();
+//        r_machine.setDaemon(true);
+        r_machine.start();
+        while(r_machine.isAlive()){
+            if (r_machine.getState()== Thread.State.WAITING){
+                System.out.println("Wake up!");
+                System.out.println(r_machine.endNumber);
+                r_machine.interrupt();
+                System.out.println(r_machine.getState());
+                Thread.sleep(100);
+            }
+        }
+//        r_machine.start();
 
     }
 

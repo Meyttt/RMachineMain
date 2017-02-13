@@ -222,6 +222,8 @@ public class AlgorithmReaderNew {
         r_machine.start();
         while(r_machine.isAlive()){
             if (r_machine.getState()== Thread.State.WAITING){
+                System.out.println("Memories: ");
+                r_machine.printMemories();
 //                System.out.println("Wake up, R-Machine!");
                 System.out.println("Press ENTER to continue...");
                 Scanner in = new Scanner(System.in);

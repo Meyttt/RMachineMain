@@ -307,7 +307,16 @@ public class R_machine extends Thread implements Runnable{
 
     }
 
+    public HashMap<String,Memory> getMemories(){
+        return this.allStorage.storage.getMemories();
 
+    }
+    public void printMemories(){
+        Set<String> names = this.allStorage.storage.getMemories().keySet();
+        for(String name:names){
+            System.out.println(this.allStorage.storage.getMemories().get(name));
+        }
+    }
 
     public static void main(String args[]) throws FileNotFoundException {
         HashMap<String, Arm> arms= new HashMap<>();

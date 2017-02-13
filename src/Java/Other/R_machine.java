@@ -76,14 +76,22 @@ public class R_machine extends Thread implements Runnable{
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
         for(ArmLine line:lines){
-            try {
+                try {
+                    System.out.println("R-Machine now waiting in condition: "+line.getCondition());
                 this.join();
+
             } catch (InterruptedException e) {
-                
+
             }
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 endNumber=line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
+                    try{
+                        System.out.println("R machine is now doing:"+statement);
+                        this.join();
+                    } catch (InterruptedException e) {
+
+                    }
                     statement.doStatement(storage,tape);
                 }
                 //if ( this.allStorage.getTape().)

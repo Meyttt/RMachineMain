@@ -94,12 +94,12 @@
 				<edge end = "4">
 					<predicate type="alphabet">Letter</predicate>
 					<operation>
-						<left value = "42"/>
+						<left value = "44"/>
 						<operator>-&gt;</operator>
 						<right value ="a"/>
 					</operation>
 					<operation>
-						<left value = "24"/>
+						<left value = "22"/>
 						<operator>-&gt;</operator>
 						<right value ="b"/>
 					</operation>

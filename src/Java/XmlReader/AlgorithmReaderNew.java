@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * Created by master on 21.11.2016.
@@ -217,14 +218,15 @@ public class AlgorithmReaderNew {
         Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
         AllStorage allStorage = new AllStorage(storage,tape);
         R_machine r_machine = new R_machine(allStorage);
-//        r_machine.setDaemon(true);
+        r_machine.setDaemon(true);
         r_machine.start();
         while(r_machine.isAlive()){
             if (r_machine.getState()== Thread.State.WAITING){
-                System.out.println("Wake up!");
-                System.out.println(r_machine.endNumber);
+//                System.out.println("Wake up, R-Machine!");
+                System.out.println("Press ENTER to continue...");
+                Scanner in = new Scanner(System.in);
+                String line = in.nextLine();
                 r_machine.interrupt();
-                System.out.println(r_machine.getState());
                 Thread.sleep(100);
             }
         }

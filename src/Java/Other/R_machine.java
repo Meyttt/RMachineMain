@@ -66,6 +66,7 @@ public class R_machine extends Thread implements Runnable{
         if(endNumber==null){
             if(arms.containsKey("0")){
                 firstArm=arms.get("0");
+                endNumber="0";
             }else{
                 System.err.println("Невозможно обработать алгоритм без нулевой вершины");
                 System.exit(-1);

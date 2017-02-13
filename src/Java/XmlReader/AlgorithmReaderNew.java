@@ -27,10 +27,10 @@ import java.util.Scanner;
  * Created by master on 21.11.2016.
  */
 public class AlgorithmReaderNew {
-    HashMap<String,Memory> memoryHashMap;
-    HashMap<String,Arm> arms = new HashMap<>();
-    HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
-    String filename;
+    public HashMap<String,Memory> memoryHashMap;
+    public HashMap<String,Arm> arms = new HashMap<>();
+    public HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
+    public String filename;
 
     public AlgorithmReaderNew(String filename) {
         this.filename=filename;
@@ -210,7 +210,7 @@ public class AlgorithmReaderNew {
             arms.put(currentNumber,new Arm(currentNumber,armLines));
         }
     }
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, InterruptedException {
+    public static void mainOld(String[] args) throws IOException, SAXException, ParserConfigurationException, InterruptedException {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew("templateStrorageTest.xml");
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
@@ -232,8 +232,9 @@ public class AlgorithmReaderNew {
                 Thread.sleep(100);
             }
         }
-//        r_machine.start();
 
     }
+
+
 
 }

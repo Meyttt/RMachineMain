@@ -28,12 +28,16 @@ public class DebuggerWindow extends Application implements Runnable{
 
 	@Override
 	public synchronized void start(Stage primaryStage) throws Exception {
-		output = new TextField();
+//		output = new TextField();
 		outputNode = new TextField();
+		outputNode.setEditable(false);
 		outputCondition = new TextField();
+		outputCondition.setEditable(false);
 		outputStatement = new TextField();
+		outputStatement.setEditable(false);
 		outputMemories = new TextArea();
 		outputMemories.setMinHeight(50);
+		outputMemories.setEditable(false);
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5));

@@ -19,14 +19,22 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 public class ProgramWindow extends Application {
 
-    private Stage primaryStage;
+    public static final String FILE = "FileWork";
+    public static final String CONSOLE = "ConsoleWork";
+    public static final String MEMORY = "FullMemory";
+    private Stage      primaryStage;
     private BorderPane rootLayout;
-    private TextArea textArea;
+    private TextArea   textArea;
+    private TextField  textField;
+    public  String     text;
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -50,15 +58,14 @@ public class ProgramWindow extends Application {
 
     @FXML
     public void initRootLayout() {
-
         rootLayout = new BorderPane();
         // Отображаем сцену, содержащую корневой макет.
         Scene scene = new Scene(rootLayout);
 
         textArea = new TextArea();
-        TextField field = new TextField();
+        textField = new TextField();
         rootLayout.setCenter(textArea);
-        rootLayout.setBottom(field);
+        rootLayout.setBottom(textField);
         textArea.setWrapText(true);
         textArea.appendText("Hello World\n");
         textArea.appendText("Hello World\n");
@@ -66,7 +73,13 @@ public class ProgramWindow extends Application {
         System.out.println(rootLayout.getChildren());
         primaryStage.setScene(scene);
         primaryStage.show();
-
+        File file = new File("data/ResultFile.txt");
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         HashMap<String, Arm> arms= new HashMap<>();
         HashMap<String, Memory> memories = new HashMap<>();
         HashMap<String, Alphabet> alphabets = new HashMap<>();
@@ -96,7 +109,13 @@ public class ProgramWindow extends Application {
         statements01.add(new Statement("LW*RW",Statement.getOperator("<-"),"Animals"));
         statements01.add(new Statement("reg2",Statement.getOperator("<-"),"13/3-6"));
         statements01.add(new Statement("tab.engineer",Statement.getOperator("<-"),"Scotty"));
-        statements01.add(new Statement("tab.engineer",Statement.getOperator("|-"),"tab.engineer = ", textArea));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("<-"),CONSOLE, textArea, textField));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("->"),CONSOLE, textArea));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("->"),FILE));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("<-"),"Kirk"));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("<-"),FILE));
+        statements01.add(new Statement(MEMORY,Statement.getOperator("->"),FILE));
+        statements01.add(new Statement("tab.engineer",Statement.getOperator("->"),CONSOLE, textArea));
         ArmLine arm01 = new ArmLine("0",new Condition("t"),statements01,"1");
         armlines.add(arm01);
 
@@ -119,6 +138,8 @@ public class ProgramWindow extends Application {
         statements12.add(new Statement("tab.key",Statement.getOperator("|-"),"tab.key = "));
         statements12.add(new Statement("reg1",Statement.getOperator("/-|"),"Input value of reg1: "));
         statements12.add(new Statement("RW",Statement.getOperator("->"),"reg2"));
+        statements12.add(new Statement("RW",Statement.getOperator("->"),"reg2"));
+        statements12.add(new Statement(MEMORY,Statement.getOperator("->"),FILE));
         ArmLine arm12 = new ArmLine("1",new Condition("*"),statements12,"#");
         armlines.add(arm12);
         Arm arm1 = new Arm("1", armlines1);
@@ -126,7 +147,7 @@ public class ProgramWindow extends Application {
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.run(textArea);
+        r_machine.analyzer(textArea);
         //Загружаем корневой макет из fxml файла.
 //        FXMLLoader loader = new FXMLLoader();
 //        loader.setLocation(ProgramWindow.class.getResource("ProgramWindow.fxml"));
@@ -148,12 +169,6 @@ public class ProgramWindow extends Application {
 //        primaryStage.show();
     }
 
-
-
-    /**
-     * Возвращает главную сцену.
-     * @return
-     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }

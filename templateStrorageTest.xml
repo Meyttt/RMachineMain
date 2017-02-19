@@ -12,10 +12,9 @@
 				<memory type="Counter" name="a"/>
 				<memory type="Counter" name="b"/>
 				<memory type="Wagon" leftName="W1LeftName" rightName="W1RightName"/>
-				<memory type ="Table" name = "tab"/>
 			</memory_block>
 			<alphabet>
-				<abc name="Letter" short_name="L">Validation1</abc>
+				<abc name="Letter" short_name="L">Validation</abc>
 				<abc name="Letter1" short_name="L1">descr1</abc>
 			</alphabet>
 		</descriptive_part>
@@ -37,11 +36,6 @@
 						<left value = "apple"/>
 						<operator>-></operator>
 						<right value ="reg3"/>
-					</operation>
-					<operation>
-						<left value = "tab.first"/>
-						<operator>.=</operator>
-						<right value ="tabvalue"/>
 					</operation>
                 </edge>
 			</arm>
@@ -94,12 +88,12 @@
 				<edge end = "4">
 					<predicate type="alphabet">Letter</predicate>
 					<operation>
-						<left value = "44"/>
+						<left value = "42"/>
 						<operator>-&gt;</operator>
 						<right value ="a"/>
 					</operation>
 					<operation>
-						<left value = "22"/>
+						<left value = "24"/>
 						<operator>-&gt;</operator>
 						<right value ="b"/>
 					</operation>
@@ -119,28 +113,8 @@
 				</edge>
 			</arm>
 			<arm begin = "3">
-				<edge end = "5">
+				<edge end = "11">
 					<predicate type="memory">reg3</predicate>
-					<operation>
-						<left value = "tab.type"/>
-						<operator>.=</operator>
-						<right value ="firstType"/>
-					</operation>
-					<operation>
-					<left value = "tab.type"/>
-					<operator>.=</operator>
-					<right value ="secondType"/>
-					</operation>
-					<operation>
-						<left value = "tab"/>
-						<operator>&amp;=</operator>
-						<right value ="firstType"/>
-					</operation>
-					<operation>
-						<left value = "tab.type"/>
-						<operator>^=</operator>
-						<right value ="1.5type"/>
-					</operation>
 					<operation>
 						<left value = "42"/>
 						<operator>-&gt;</operator>
@@ -163,21 +137,6 @@
 						<left value = "24"/>
 						<operator>-&gt;</operator>
 						<right value ="b"/>
-					</operation>
-				</edge>
-			</arm>
-			<arm begin = "5">
-				<edge end = "5">
-					<predicate type="alphabet">Letter</predicate>
-					<operation>
-						<left value = "tab.type"/>
-						<operator>.=</operator>
-						<right value ="firstType"/>
-					</operation>
-					<operation>
-						<left value = "tab.type"/>
-						<operator>.=</operator>
-						<right value ="secondType"/>
 					</operation>
 				</edge>
 			</arm>

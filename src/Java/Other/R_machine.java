@@ -10,8 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -22,30 +20,29 @@ import java.util.Set;
  * или не здесь
  * ОБНОВЛЕНИЕ: по замыслу здесь
  */
-public class R_machine extends Thread implements Runnable{
+public class R_machine {
     AllStorage allStorage;
     Storage storage;
     Tape tape;
     private Stage primaryStage;
     private Pane rootLayout;
     private TextArea textArea;
-    public String endNumber=null;
 
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
         this.storage=allStorage.getStorage();
         this.tape=allStorage.getTape();
     }
-//    public Arm start(){
-//        Set<String> armnumbers = storage.arms.keySet();
-//        Arm firstArm = null;
-//        if(armnumbers.contains("0")){
-//            firstArm=storage.arms.get("0");
-//        }else{
-//            System.err.println("Нет узла с нулевым номером!");
-//        }
-//        return firstArm;
-//    }
+    public Arm start(){
+        Set<String> armnumbers = storage.arms.keySet();
+        Arm firstArm = null;
+        if(armnumbers.contains("0")){
+            firstArm=storage.arms.get("0");
+        }else{
+            System.err.println("Нет узла с нулевым номером!");
+        }
+        return firstArm;
+    }
 
     public void checkArm(Arm curretArm) {
         ArrayList<ArmLine> lines = curretArm.getLines();
@@ -60,39 +57,21 @@ public class R_machine extends Thread implements Runnable{
      * Основной цикл обхода алгортма. Без аргуентов вызывается один аз при запуске Р-машины.
      */
 
-    public void run(){
-        Arm firstArm=null;
+    public void analyzer(){
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
-        if(endNumber==null){
-            if(arms.containsKey("0")){
-                firstArm=arms.get("0");
-                endNumber="0";
-            }else{
-                System.err.println("Невозможно обработать алгоритм без нулевой вершины");
-                System.exit(-1);
-            }
+        Arm firstArm=null;
+        if(arms.containsKey("0")){
+            firstArm=arms.get("0");
         }else{
-            firstArm=arms.get(endNumber);
+            System.err.println("Невозможно обработать алгоритм без нулевой вершины");
+            System.exit(-1);
         }
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
         for(ArmLine line:lines){
-                try {
-                    System.out.println("R-Machine now waiting in condition: "+line.getCondition());
-                this.join();
-
-            } catch (InterruptedException e) {
-
-            }
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 endNumber=line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
-                    try{
-                        System.out.println("R machine is now doing:"+statement);
-                        this.join();
-                    } catch (InterruptedException e) {
-
-                    }
                     statement.doStatement(storage,tape);
                 }
                 //if ( this.allStorage.getTape().)
@@ -114,32 +93,32 @@ public class R_machine extends Thread implements Runnable{
 //                }
                 char tapeCurrent=this.tape.readCurrent();
                 if(tapeCurrent=='#'){
-                    try {
-                        FileWriter file = new FileWriter("src/data/ResultFile.txt");
-                        String buftext = null;
-                        System.out.println("Конец программы");
-                        Set<String> names = this.allStorage.storage.getMemories().keySet();
-                        for(String name:names){
-                            buftext += this.allStorage.storage.getMemories().get(name).toString() + "\n";
-                            System.out.println(this.allStorage.storage.getMemories().get(name));
-                        }
-                        file.write(buftext);
-                        file.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    System.out.println("Конец программы");
+//                    try {
+//                        FileWriter file = new FileWriter("data/ResultFile.txt");
+//                        String buftext = null;
+//
+//                        Set<String> names = this.allStorage.storage.getMemories().keySet();
+//                        for(String name:names){
+//                            buftext += this.allStorage.storage.getMemories().get(name).toString() + "\n";
+//                            System.out.println(this.allStorage.storage.getMemories().get(name));
+//                        }
+//                        file.write(buftext);
+//                        file.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
 
                     return;
                 }
-                this.endNumber=endNumber;
-                run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
+                analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }
         }
 
     }
 
-    public void run(TextArea textArea){
+    public void analyzer(TextArea textArea){
         this.textArea = textArea;
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
@@ -176,27 +155,26 @@ public class R_machine extends Thread implements Runnable{
 //                }
                 char tapeCurrent=this.tape.readCurrent();
                 if(tapeCurrent=='#'){
-                    try {
-                        FileWriter file = new FileWriter("src/data/ResultFile.txt");
-                        String buftext = null;
-                        textArea.appendText("Конец программы\n");
-                        System.out.println("Конец программы");
-                        Set<String> names = this.allStorage.storage.getMemories().keySet();
-                        for(String name:names){
-                            buftext += this.allStorage.storage.getMemories().get(name).toString() + "\n";
-                            textArea.appendText(String.valueOf(this.allStorage.storage.getMemories().get(name) + "\n"));
-                            System.out.println(this.allStorage.storage.getMemories().get(name));
-                        }
-                        file.write(buftext);
-                        file.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    textArea.appendText("Конец программы\n");
+                    System.out.println("Конец программы");
+//                    try {
+//                        FileWriter file = new FileWriter("data/ResultFile.txt");
+//                        String buftext = "";
+//                        Set<String> names = this.allStorage.storage.getMemories().keySet();
+//                        for(String name:names){
+//                            buftext += this.allStorage.storage.getMemories().get(name).toString() + "\n";
+//                            textArea.appendText(String.valueOf(this.allStorage.storage.getMemories().get(name) + "\n"));
+//                            System.out.println(this.allStorage.storage.getMemories().get(name));
+//                        }
+//                        file.write(buftext);
+//                        file.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
 
                     return;
                 }
-                this.endNumber=endNumber;
-                run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
+                analyzer(endNumber); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }
         }
@@ -206,7 +184,7 @@ public class R_machine extends Thread implements Runnable{
         }
 
     }
-//    public void run(String armNumber){
+//    public void analyzer(String armNumber){
 //        HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
 //        Arm firstArm=null;
 //        if(arms.containsKey(armNumber)){
@@ -240,14 +218,14 @@ public class R_machine extends Thread implements Runnable{
 ////                    }
 ////                    return;
 ////                }
-//                run(endNumber);
+//                analyzer(endNumber);
 //                return;
 //            }
 //        }
 //
 //    }
 
-    public void run(String armNumber){
+    public void analyzer(String armNumber){
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         Arm firstArm=null;
         if(arms.containsKey(armNumber)){
@@ -260,7 +238,6 @@ public class R_machine extends Thread implements Runnable{
         String endNumber = null;
         for(ArmLine line:lines){
             if(line.compare(this.tape)){
-
                 endNumber = line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){
                     statement.doStatement(storage,tape);
@@ -293,7 +270,7 @@ public class R_machine extends Thread implements Runnable{
 //                    }
 //                    return;
 //                }
-                run(endNumber);
+                analyzer(endNumber);
                 return;
             }
         }
@@ -308,16 +285,7 @@ public class R_machine extends Thread implements Runnable{
 
     }
 
-    public HashMap<String,Memory> getMemories(){
-        return this.allStorage.storage.getMemories();
 
-    }
-    public void printMemories(){
-        Set<String> names = this.allStorage.storage.getMemories().keySet();
-        for(String name:names){
-            System.out.println(this.allStorage.storage.getMemories().get(name));
-        }
-    }
 
     public static void main(String args[]) throws FileNotFoundException {
         HashMap<String, Arm> arms= new HashMap<>();
@@ -378,7 +346,7 @@ public class R_machine extends Thread implements Runnable{
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.run();
+        r_machine.analyzer();
 
     }
 

@@ -8,6 +8,7 @@ import java.util.Objects;
  * Created by master on 24.10.2016.
  */
 public class Table implements Memory {
+//TODO: в write() передаются аргументы в неправильном порядке: сначала должно быть значение, потом имя
     private String tname;
     ArrayList<HashMap<String,String>> table = new ArrayList<>();
 //    ArrayList<String> colnames = new ArrayList<>();
@@ -17,7 +18,6 @@ public class Table implements Memory {
 //    private int columns;
 
     public Table(String tname, ArrayList<HashMap<String,String>> table, HashMap<String,String> colnames) {
-        //todo: Есть ли ( и нужен ли?) конструктор ТОЛЬКО с именем таблицы и именами столбцов?
         this.tname = tname;
         if(table!=null) {
             this.table = table;
@@ -34,9 +34,15 @@ public class Table implements Memory {
         }
     }
 
-    public Table(String tname) {
+    public Table(String tname/*, ArrayList<HashMap<String,String>> table,String[] colnames*/) {
         this.tname = tname;
-        this.colnames = new HashMap<>();
+//        if(table!=null) {
+//            this.table = table;
+//        }
+        HashMap<String,String> list = new HashMap<>();
+//        for()
+//        Collections.addAll(list, colnames);
+        this.colnames = list;
     }
 
     public String getName() {
@@ -88,10 +94,10 @@ public class Table implements Memory {
 //    }
     @Override
     public boolean addNewStr(String index, String value) {
+        this.strnumber++;
         this.table.add(strnumber,new HashMap<String,String>());
         this.table.get(strnumber).put(index, value);
-        this.strnumber++;
-        return (this.table.get(strnumber-1).get(index) != null);
+        return (this.table.get(strnumber).get(index) != null);
     }
     @Override
     public boolean insertNewStr(String index, String value) {

@@ -21,16 +21,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 /**
  * Created by master on 21.11.2016.
  */
 public class AlgorithmReaderNew {
-    public HashMap<String,Memory> memoryHashMap;
-    public HashMap<String,Arm> arms = new HashMap<>();
-    public HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
-    public String filename;
+    HashMap<String,Memory> memoryHashMap;
+    HashMap<String,Arm> arms = new HashMap<>();
+    HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
+    String filename;
 
     public AlgorithmReaderNew(String filename) {
         this.filename=filename;
@@ -64,11 +63,7 @@ public class AlgorithmReaderNew {
                         String rname = currentMemory.getAttributes().getNamedItem("rightName").getNodeValue();
                         memoryHashMap.put(lname+"*"+rname, new Wagon(lname,rname,null));
                         break;
-                    case "Table":
-                        name = currentMemory.getAttributes().getNamedItem("name").getNodeValue();
-                        memoryHashMap.put(name, new Table(name));
-                        break;
-
+//                    case "Table":
 //                        name = currentMemory.getAttributes().getNamedItem("name").getNodeValue().replace("\"","");
 //                        ArrayList<String> colNames = new ArrayList<>();
 //                        NodeList tableChildren = currentMemory.getChildNodes();
@@ -210,31 +205,16 @@ public class AlgorithmReaderNew {
             arms.put(currentNumber,new Arm(currentNumber,armLines));
         }
     }
-    public static void mainOld(String[] args) throws IOException, SAXException, ParserConfigurationException, InterruptedException {
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew("templateStrorageTest.xml");
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
-        Tape tape = new Tape("perfectapple#");
+        Tape tape = new Tape("perfectapple1#");
         Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
         AllStorage allStorage = new AllStorage(storage,tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.setDaemon(true);
-        r_machine.start();
-        while(r_machine.isAlive()){
-            if (r_machine.getState()== Thread.State.WAITING){
-                System.out.println("Memories: ");
-                r_machine.printMemories();
-//                System.out.println("Wake up, R-Machine!");
-                System.out.println("Press ENTER to continue...");
-                Scanner in = new Scanner(System.in);
-                String line = in.nextLine();
-                r_machine.interrupt();
-                Thread.sleep(100);
-            }
-        }
+        r_machine.analyzer();
 
     }
-
-
 
 }

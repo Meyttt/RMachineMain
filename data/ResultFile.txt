@@ -1,0 +1,6 @@
+tab.engineer:Scotty
+wagon: LW*RW; value:[Animals, Cat, Dog, Animals]
+table: tab; value: [{engineer=Scotty}]
+register: reg1; value: null
+register: reg2; value: -2
+

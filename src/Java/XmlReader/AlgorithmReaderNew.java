@@ -26,10 +26,10 @@ import java.util.HashMap;
  * Created by master on 21.11.2016.
  */
 public class AlgorithmReaderNew {
-    HashMap<String,Memory> memoryHashMap;
-    HashMap<String,Arm> arms = new HashMap<>();
-    HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
-    String filename;
+    public HashMap<String,Memory> memoryHashMap;
+    public HashMap<String,Arm> arms = new HashMap<>();
+    public HashMap<String, Alphabet> alphabetHashMap = new HashMap<>();
+    public String filename;
 
     public AlgorithmReaderNew(String filename) {
         this.filename=filename;
@@ -213,7 +213,7 @@ public class AlgorithmReaderNew {
         Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
         AllStorage allStorage = new AllStorage(storage,tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.analyzer();
+        r_machine.run();
 
     }
 

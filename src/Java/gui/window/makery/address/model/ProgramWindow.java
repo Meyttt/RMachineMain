@@ -147,7 +147,7 @@ public class ProgramWindow extends Application {
         arms.put("1",arm1);
         AllStorage allStorage = new AllStorage(new Storage(arms,memories,alphabets),tape);
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.analyzer(textArea);
+        r_machine.run(textArea);
         //Загружаем корневой макет из fxml файла.
 //        FXMLLoader loader = new FXMLLoader();
 //        loader.setLocation(ProgramWindow.class.getResource("ProgramWindow.fxml"));

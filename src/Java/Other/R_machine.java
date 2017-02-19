@@ -28,22 +28,24 @@ public class R_machine extends Thread implements Runnable{
     private Pane rootLayout;
     private TextArea textArea;
     public String endNumber=null;
+    public Condition currentCondition = null;
+    public Statement currenntStatement = null;
 
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
         this.storage=allStorage.getStorage();
         this.tape=allStorage.getTape();
     }
-    public Arm start(){
-        Set<String> armnumbers = storage.arms.keySet();
-        Arm firstArm = null;
-        if(armnumbers.contains("0")){
-            firstArm=storage.arms.get("0");
-        }else{
-            System.err.println("Нет узла с нулевым номером!");
-        }
-        return firstArm;
-    }
+//    public Arm start(){
+//        Set<String> armnumbers = storage.arms.keySet();
+//        Arm firstArm = null;
+//        if(armnumbers.contains("0")){
+//            firstArm=storage.arms.get("0");
+//        }else{
+//            System.err.println("Нет узла с нулевым номером!");
+//        }
+//        return firstArm;
+//    }
 
     public void checkArm(Arm curretArm) {
         ArrayList<ArmLine> lines = curretArm.getLines();
@@ -59,6 +61,8 @@ public class R_machine extends Thread implements Runnable{
      */
 
     public synchronized void run(){
+        this.currenntStatement=null;
+        this.currentCondition=null;
         Arm firstArm=null;
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
         if(endNumber==null){
@@ -77,7 +81,8 @@ public class R_machine extends Thread implements Runnable{
         for(ArmLine line:lines){
                 try {
                     System.out.println("R-Machine now waiting in condition: "+line.getCondition());
-                this.wait();
+                    this.currentCondition = line.getCondition();
+                    this.wait();
             } catch (InterruptedException e) {
 
             }
@@ -86,6 +91,7 @@ public class R_machine extends Thread implements Runnable{
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
                     try{
                         System.out.println("R machine is now doing:"+statement);
+                        this.currenntStatement = statement;
                         this.wait();
                     } catch (InterruptedException e) {
 
@@ -315,6 +321,14 @@ public class R_machine extends Thread implements Runnable{
         for(String name:names){
             System.out.println(this.allStorage.storage.getMemories().get(name));
         }
+    }
+    public String stringMemories(){
+        String answer="";
+        Set<String> names = this.allStorage.storage.getMemories().keySet();
+        for(String name:names){
+            answer+=(this.allStorage.storage.getMemories().get(name)+"\n");
+        }
+        return answer;
     }
 
     public static void main(String args[]) throws FileNotFoundException {

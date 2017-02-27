@@ -30,12 +30,15 @@ public class R_machine extends Thread implements Runnable{
     public String endNumber=null;
     public Condition currentCondition = null;
     public Statement currenntStatement = null;
+    public StopType stopType = StopType.CONDITION;
 
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
         this.storage=allStorage.getStorage();
         this.tape=allStorage.getTape();
     }
+
+
 //    public Arm start(){
 //        Set<String> armnumbers = storage.arms.keySet();
 //        Arm firstArm = null;
@@ -78,23 +81,28 @@ public class R_machine extends Thread implements Runnable{
         }
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
-        for(ArmLine line:lines){
+        for(ArmLine line:lines) {
+            if (stopType == StopType.CONDITION){
                 try {
-                    System.out.println("R-Machine now waiting in condition: "+line.getCondition());
                     this.currentCondition = line.getCondition();
+                    System.out.println("R-Machine now waiting in condition: " + line.getCondition());
                     this.wait();
-            } catch (InterruptedException e) {
+                } catch (InterruptedException e) {
 
+                }
             }
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 endNumber=line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
-                    try{
-                        System.out.println("R machine is now doing:"+statement);
-                        this.currenntStatement = statement;
-                        this.wait();
-                    } catch (InterruptedException e) {
+                    if(stopType==StopType.STATEMENT) {
+                        try {
+                            this.currenntStatement = statement;
+                            System.out.println("R machine is now doing:" + statement);
 
+                            this.wait();
+                        } catch (InterruptedException e) {
+
+                        }
                     }
                     statement.doStatement(storage,tape);
                 }
@@ -117,6 +125,7 @@ public class R_machine extends Thread implements Runnable{
 //                }
                 char tapeCurrent=this.tape.readCurrent();
                 if(tapeCurrent=='#'){
+                    this.interrupt();
 //                    System.out.println("Конец программы");
 //                    try {
 //                        FileWriter file = new FileWriter("data/ResultFile.txt");

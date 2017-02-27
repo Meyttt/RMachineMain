@@ -5,16 +5,9 @@ import Other.R_machine;
 import Other.Storage;
 import Other.Tape;
 import XmlReader.AlgorithmReaderNew;
-import com.sun.corba.se.spi.orbutil.threadpool.NoSuchThreadPoolException;
-import com.sun.corba.se.spi.orbutil.threadpool.ThreadPool;
-import com.sun.corba.se.spi.orbutil.threadpool.ThreadPoolChooser;
-import com.sun.corba.se.spi.orbutil.threadpool.ThreadPoolManager;
 
-import java.io.IOException;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by Admin on 28.01.2017.
@@ -39,7 +32,7 @@ public class DebuggerRunner {
 		Thread threaddb = new Thread(debugger);
 		threaddb.start();
 
-		Thread.sleep(10000);
+		Thread.sleep(1000);
 
 		threadrm.start();
 

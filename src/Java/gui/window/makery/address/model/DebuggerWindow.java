@@ -1,6 +1,7 @@
 package gui.window.makery.address.model;
 
 import Other.R_machine;
+import Other.StopType;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -43,8 +44,18 @@ public class DebuggerWindow extends Application implements Runnable{
 		grid.setPadding(new Insets(5));
 		grid.setHgap(5);
 		grid.setVgap(5);
-		Button ver = new Button("Далее");
-		ver.setOnAction(event -> {
+		Button nextCond = new Button("Следующее условие");
+		Button nextStat = new Button("Следующее выражение");
+		nextCond.setOnAction(event -> {
+			System.out.println(rmThread.getState());
+			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			r_machine.stopType=StopType.CONDITION;
 			if(r_machine.endNumber==null){
 				outputNode.setText("null");
 			}else {
@@ -71,8 +82,44 @@ public class DebuggerWindow extends Application implements Runnable{
 //			}
 		});
 
-		grid.addRow(0, new Label("Вершина:"), outputNode, ver);
-		grid.addRow(1, new Label("Условие:"), outputCondition);
+		nextStat.setOnAction(event -> {
+			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				System.out.println(rmThread.getState());
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			r_machine.stopType= StopType.STATEMENT;
+			if(r_machine.endNumber==null){
+				outputNode.setText("null");
+			}else {
+				outputNode.setText(r_machine.endNumber);
+			}
+			if(r_machine.currentCondition==null){
+				outputCondition.setText("null");
+			}else {
+				outputCondition.setText(r_machine.currentCondition.toString());
+			}
+			if(r_machine.currenntStatement==null){
+				outputStatement.setText("null");
+			}else {
+				outputStatement.setText(r_machine.currenntStatement.toString());
+			}
+			outputMemories.setText(r_machine.stringMemories());
+
+			rmThread.interrupt();
+
+			//			try {
+//				Thread.sleep(10000);
+//			} catch (Exception e) {
+//				System.out.println("error");
+//			}
+		});
+
+		grid.addRow(0, new Label("Вершина:"), outputNode, nextCond);
+		grid.addRow(1, new Label("Условие:"), outputCondition,nextStat);
 		grid.addRow(2, new Label("Выражение:"), outputStatement);
 		grid.addRow(3, new Label("Памяти:"), outputMemories);
 		GridPane.setHgrow(outputStatement, Priority.ALWAYS);

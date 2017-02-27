@@ -27,10 +27,43 @@ public class R_machine extends Thread implements Runnable{
     private Stage primaryStage;
     private Pane rootLayout;
     private TextArea textArea;
-    public String endNumber=null;
-    public Condition currentCondition = null;
-    public Statement currenntStatement = null;
-    public StopType stopType = StopType.CONDITION;
+    public String currentNumber =null;
+
+    public synchronized void setCurrentCondition(Condition currentCondition) {
+        this.currentCondition = currentCondition;
+    }
+
+    private volatile Condition currentCondition = null;
+
+    public synchronized void setCurrenntStatement(Statement currenntStatement) {
+        this.currenntStatement = currenntStatement;
+    }
+
+    private volatile Statement currenntStatement = null;
+
+    public synchronized void setStopType(StopType stopType) {
+        this.stopType = stopType;
+    }
+
+    private volatile StopType stopType = null;
+    public synchronized StopType getStopType() {
+        return stopType;
+    }
+
+
+
+    public synchronized Condition getCurrentCondition() {
+        return currentCondition;
+    }
+
+    public synchronized Statement getCurrenntStatement() {
+        return currenntStatement;
+    }
+
+    public synchronized String getCurrentNumber() {
+        return currentNumber;
+    }
+
 
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
@@ -64,20 +97,27 @@ public class R_machine extends Thread implements Runnable{
      */
 
     public synchronized void run(){
+        if(currentNumber==null){
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+
+            }
+        }
         this.currenntStatement=null;
         this.currentCondition=null;
         Arm firstArm=null;
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
-        if(endNumber==null){
+        if(currentNumber ==null){
             if(arms.containsKey("0")){
                 firstArm=arms.get("0");
-                endNumber="0";
+                currentNumber ="0";
             }else{
                 System.err.println("Невозможно обработать алгоритм без нулевой вершины");
                 System.exit(-1);
             }
         }else{
-            firstArm=arms.get(endNumber);
+            firstArm=arms.get(currentNumber);
         }
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
@@ -85,7 +125,8 @@ public class R_machine extends Thread implements Runnable{
             if (stopType == StopType.CONDITION){
                 try {
                     this.currentCondition = line.getCondition();
-                    System.out.println("R-Machine now waiting in condition: " + line.getCondition());
+                    Thread.sleep(100);
+                    System.out.println("R-Machine now waiting in condition: " + this.currentCondition);
                     this.wait();
                 } catch (InterruptedException e) {
 
@@ -93,10 +134,12 @@ public class R_machine extends Thread implements Runnable{
             }
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 endNumber=line.getEndArmNumber();
+                currentNumber=line.getEndArmNumber();
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
                     if(stopType==StopType.STATEMENT) {
                         try {
                             this.currenntStatement = statement;
+                            Thread.sleep(100);
                             System.out.println("R machine is now doing:" + statement);
 
                             this.wait();
@@ -107,7 +150,7 @@ public class R_machine extends Thread implements Runnable{
                     statement.doStatement(storage,tape);
                 }
                 //if ( this.allStorage.getTape().)
-//                if(Objects.equals(endNumber, "#")) { //если указано, что следующая вершина конечная - вывод состояний вех памятей и возврат из обхода
+//                if(Objects.equals(currentNumber, "#")) { //если указано, что следующая вершина конечная - вывод состояний вех памятей и возврат из обхода
 //                    System.out.println("Конец программы");
 //                    Set<String> names = this.allStorage.storage.getMemories().keySet();
 //                    for(String name:names){
@@ -115,7 +158,7 @@ public class R_machine extends Thread implements Runnable{
 //                    }
 //                    return;
 //                }
-//                if(endNumber == "#") {
+//                if(currentNumber == "#") {
 //                    System.out.println("Конец программы");
 //                    Set<String> names = this.allStorage.storage.getMemories().keySet();
 //                    for(String name:names){
@@ -144,7 +187,11 @@ public class R_machine extends Thread implements Runnable{
 
                     return;
                 }
-                this.endNumber=endNumber;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }
@@ -171,7 +218,7 @@ public class R_machine extends Thread implements Runnable{
                     statement.doStatement(storage,tape);
                 }
                //if ( this.allStorage.getTape().)
-//                if(Objects.equals(endNumber, "#")) { //если указано, что следующая вершина конечная - вывод состояний вех памятей и возврат из обхода
+//                if(Objects.equals(currentNumber, "#")) { //если указано, что следующая вершина конечная - вывод состояний вех памятей и возврат из обхода
 //                    System.out.println("Конец программы");
 //                    Set<String> names = this.allStorage.storage.getMemories().keySet();
 //                    for(String name:names){
@@ -179,7 +226,7 @@ public class R_machine extends Thread implements Runnable{
 //                    }
 //                    return;
 //                }
-//                if(endNumber == "#") {
+//                if(currentNumber == "#") {
 //                    System.out.println("Конец программы");
 //                    Set<String> names = this.allStorage.storage.getMemories().keySet();
 //                    for(String name:names){
@@ -208,7 +255,7 @@ public class R_machine extends Thread implements Runnable{
 
                     return;
                 }
-                this.endNumber=endNumber;
+                this.currentNumber =endNumber;
                 run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }
@@ -231,7 +278,7 @@ public class R_machine extends Thread implements Runnable{
 //        ArrayList<ArmLine> lines = firstArm.getLines();
 //        for(ArmLine line:lines){
 //            if(line.compare(this.tape)){
-//                String endNumber = line.getEndArmNumber();
+//                String currentNumber = line.getEndArmNumber();
 //                for(Statement statement:line.getStatements()){
 //                    statement.doStatement(storage,tape);
 //                }
@@ -245,7 +292,7 @@ public class R_machine extends Thread implements Runnable{
 //                    return;
 //                }
 //
-////                if(endNumber == "#") {
+////                if(currentNumber == "#") {
 ////                    System.out.println("Конец программы");
 ////                    Set<String> names = this.allStorage.storage.getMemories().keySet();
 ////                    for(String name:names){
@@ -253,7 +300,7 @@ public class R_machine extends Thread implements Runnable{
 ////                    }
 ////                    return;
 ////                }
-//                run(endNumber);
+//                run(currentNumber);
 //                return;
 //            }
 //        }
@@ -298,7 +345,7 @@ public class R_machine extends Thread implements Runnable{
                     return;
                 }
 
-//                if(endNumber == "#") {
+//                if(currentNumber == "#") {
 //                    System.out.println("Конец программы");
 //                    Set<String> names = this.allStorage.storage.getMemories().keySet();
 //                    for(String name:names){

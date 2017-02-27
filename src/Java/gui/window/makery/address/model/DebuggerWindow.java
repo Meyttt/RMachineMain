@@ -55,25 +55,33 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			r_machine.stopType=StopType.CONDITION;
-			if(r_machine.endNumber==null){
+			r_machine.setStopType(StopType.CONDITION);
+			rmThread.interrupt();
+			while((!(rmThread.getState()== Thread.State.WAITING))&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(r_machine.currentNumber ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.endNumber);
+				outputNode.setText(r_machine.currentNumber);
 			}
-			if(r_machine.currentCondition==null){
+			if(r_machine.getCurrentNumber()==null){
 				outputCondition.setText("null");
 			}else {
-				outputCondition.setText(r_machine.currentCondition.toString());
+				outputCondition.setText(r_machine.getCurrentCondition().toString());
 			}
-			if(r_machine.currenntStatement==null){
+			if(r_machine.getCurrenntStatement()==null){
 				outputStatement.setText("null");
 			}else {
-				outputStatement.setText(r_machine.currenntStatement.toString());
+				outputStatement.setText(r_machine.getCurrenntStatement().toString());
 			}
 			outputMemories.setText(r_machine.stringMemories());
 
-			rmThread.interrupt();
+
 
 			//			try {
 //				Thread.sleep(10000);
@@ -91,25 +99,34 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			r_machine.stopType= StopType.STATEMENT;
-			if(r_machine.endNumber==null){
+			r_machine.setStopType( StopType.STATEMENT);
+			rmThread.interrupt();
+			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				System.out.println(rmThread.getState());
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(r_machine.currentNumber ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.endNumber);
+				outputNode.setText(r_machine.currentNumber);
 			}
-			if(r_machine.currentCondition==null){
+			if(r_machine.getCurrentCondition()==null){
 				outputCondition.setText("null");
 			}else {
-				outputCondition.setText(r_machine.currentCondition.toString());
+				outputCondition.setText(r_machine.getCurrentCondition().toString());
 			}
-			if(r_machine.currenntStatement==null){
+			if(r_machine.getCurrenntStatement()==null){
 				outputStatement.setText("null");
 			}else {
-				outputStatement.setText(r_machine.currenntStatement.toString());
+				outputStatement.setText(r_machine.getCurrenntStatement().toString());
 			}
 			outputMemories.setText(r_machine.stringMemories());
 
-			rmThread.interrupt();
+
 
 			//			try {
 //				Thread.sleep(10000);

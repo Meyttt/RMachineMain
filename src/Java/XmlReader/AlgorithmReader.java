@@ -94,7 +94,7 @@ public class AlgorithmReader {
 //                ArrayList<Statement> statements = new ArrayList<>();
 //                Node edge = edges.item(j);
 //                if (edge.hasChildNodes()) {
-//                    String endNumber = edge.getAttributes().getNamedItem("end").getNodeValue();
+//                    String currentNumber = edge.getAttributes().getNamedItem("end").getNodeValue();
 //                    NodeList allLines = edge.getChildNodes();
 //                    for (int k = 0; k < allLines.getLength(); k++) {
 //                        Node line = allLines.item(k);
@@ -105,11 +105,11 @@ public class AlgorithmReader {
 //                                    if (lineNodes.item(l).hasChildNodes()) {
 //                                        switch (lineNodes.item(l).getNodeName()) {
 //                                            case ("alphabet"): {
-//                                                condition = new Logic.Condition(null, new Alphabet(lineNodes.item(l).getFirstChild().getNodeValue()), endNumber);
+//                                                condition = new Logic.Condition(null, new Alphabet(lineNodes.item(l).getFirstChild().getNodeValue()), currentNumber);
 //                                                break;
 //                                            }
 //                                            case ("predicateText"): {
-//                                                condition = new Logic.Condition(lineNodes.item(l).getFirstChild().getNodeValue(), null, endNumber);
+//                                                condition = new Logic.Condition(lineNodes.item(l).getFirstChild().getNodeValue(), null, currentNumber);
 //                                                break;
 //                                            }
 ////                                            case ("const"): {

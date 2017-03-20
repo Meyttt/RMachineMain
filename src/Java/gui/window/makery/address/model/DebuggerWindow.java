@@ -204,6 +204,16 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
+			double sss = Math.exp(3000);
+			for(char a ='a';a<'z';a++){
+				System.out.println(a);
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			System.out.println(r_machine.currentNumber);
 			if(r_machine.currentNumber ==null){
 				outputNode.setText("null");
 			}else {

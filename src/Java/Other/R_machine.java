@@ -27,7 +27,7 @@ public class R_machine extends Thread implements Runnable{
     private Stage primaryStage;
     private Pane rootLayout;
     private TextArea textArea;
-    public volatile String currentNumber = null;
+    public String currentNumber = null;
 
     public synchronized void setCurrentCondition(Condition currentCondition) {
         this.currentCondition = currentCondition;
@@ -109,13 +109,13 @@ public class R_machine extends Thread implements Runnable{
             }
         }
 
-//        if(currentNumber==null){ //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
-//            try {
-//                this.wait();
-//            } catch (InterruptedException e) {
-//
-//            }
-//        }
+        if(currentNumber==null){ //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+
+            }
+        }
         this.currenntStatement=null;
         this.currentCondition=null;
         Arm firstArm=null;
@@ -123,6 +123,11 @@ public class R_machine extends Thread implements Runnable{
         if(currentNumber ==null) {
             if (arms.containsKey("0")) {
                 this.setCurrentNumber("0");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.err.println("Невозможно обработать алгоритм без нулевой вершины");
                 System.exit(-1);
@@ -145,7 +150,13 @@ public class R_machine extends Thread implements Runnable{
             }
             if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
                 endNumber=line.getEndArmNumber();
-                setCurrentNumber(line.getEndArmNumber());
+
+                try {
+                    this.setCurrentNumber(line.getEndArmNumber());
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
                     if(stopType==StopType.STATEMENT) {
                         try {

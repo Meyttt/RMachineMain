@@ -44,8 +44,15 @@ public class DebuggerWindow extends Application implements Runnable{
 		grid.setPadding(new Insets(5));
 		grid.setHgap(5);
 		grid.setVgap(5);
+		Button start = new Button("Начать работу");
 		Button nextCond = new Button("Следующее условие");
 		Button nextStat = new Button("Следующее выражение");
+		Button nextNode = new Button("Следующая вершина");
+		Button toEnd = new Button("В конец программы");
+		nextCond.setDisable(true);
+		nextStat.setDisable(true);
+		nextNode.setDisable(true);
+		toEnd.setDisable(true);
 		nextCond.setOnAction(event -> {
 			System.out.println(rmThread.getState());
 			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
@@ -64,12 +71,12 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			if(r_machine.currentNumber ==null){
+			if(r_machine.getCurrentNumber() ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.currentNumber);
+				outputNode.setText(r_machine.getCurrentNumber());
 			}
-			if(r_machine.getCurrentNumber()==null){
+			if(r_machine.getCurrentCondition()==null){
 				outputCondition.setText("null");
 			}else {
 				outputCondition.setText(r_machine.getCurrentCondition().toString());
@@ -135,10 +142,146 @@ public class DebuggerWindow extends Application implements Runnable{
 //			}
 		});
 
-		grid.addRow(0, new Label("Вершина:"), outputNode, nextCond);
-		grid.addRow(1, new Label("Условие:"), outputCondition,nextStat);
+		nextNode.setOnAction(event -> {
+			System.out.println(rmThread.getState());
+			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			r_machine.setStopType(StopType.NODE);
+			rmThread.interrupt();
+			while((!(rmThread.getState()== Thread.State.WAITING))&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(r_machine.currentNumber ==null){
+				outputNode.setText("null");
+			}else {
+				outputNode.setText(r_machine.currentNumber);
+			}
+			if(r_machine.getCurrentCondition()==null){
+				outputCondition.setText("null");
+			}else {
+				outputCondition.setText(r_machine.getCurrentCondition().toString());
+			}
+			if(r_machine.getCurrenntStatement()==null){
+				outputStatement.setText("null");
+			}else {
+				outputStatement.setText(r_machine.getCurrenntStatement().toString());
+			}
+			outputMemories.setText(r_machine.stringMemories());
+
+
+
+			//			try {
+//				Thread.sleep(10000);
+//			} catch (Exception e) {
+//				System.out.println("error");
+//			}
+		});
+
+		toEnd.setOnAction(event -> {
+			System.out.println(rmThread.getState());
+			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			r_machine.setStopType(StopType.END);
+			rmThread.interrupt();
+			while((!(rmThread.getState()== Thread.State.WAITING))&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(r_machine.currentNumber ==null){
+				outputNode.setText("null");
+			}else {
+				outputNode.setText(r_machine.currentNumber);
+			}
+			if(r_machine.getCurrentCondition()==null){
+				outputCondition.setText("null");
+			}else {
+				outputCondition.setText(r_machine.getCurrentCondition().toString());
+			}
+			if(r_machine.getCurrenntStatement()==null){
+				outputStatement.setText("null");
+			}else {
+				outputStatement.setText(r_machine.getCurrenntStatement().toString());
+			}
+			outputMemories.setText(r_machine.stringMemories());
+
+
+
+			//			try {
+//				Thread.sleep(10000);
+//			} catch (Exception e) {
+//				System.out.println("error");
+//			}
+		});
+
+		start.setOnAction(event -> {
+			nextCond.setDisable(false);
+			nextStat.setDisable(false);
+			nextNode.setDisable(false);
+			toEnd.setDisable(false);
+			System.out.println(rmThread.getState());
+			while(!(rmThread.getState()== Thread.State.WAITING)&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+//			rmThread.interrupt();
+			while((!(rmThread.getState()== Thread.State.WAITING))&&!(rmThread.getState()== Thread.State.TERMINATED)){
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if(r_machine.currentNumber ==null){
+				outputNode.setText("null");
+			}else {
+				outputNode.setText(r_machine.currentNumber);
+			}
+			if(r_machine.getCurrentCondition()==null){
+				outputCondition.setText("null");
+			}else {
+				outputCondition.setText(r_machine.getCurrentCondition().toString());
+			}
+			if(r_machine.getCurrenntStatement()==null){
+				outputStatement.setText("null");
+			}else {
+				outputStatement.setText(r_machine.getCurrenntStatement().toString());
+			}
+			outputMemories.setText(r_machine.stringMemories());
+
+
+
+			//			try {
+//				Thread.sleep(10000);
+//			} catch (Exception e) {
+//				System.out.println("error");
+//			}
+		});
+
+		grid.addRow(0, new Label("Вершина:"), outputNode);
+		grid.addRow(1, new Label("Условие:"), outputCondition);
 		grid.addRow(2, new Label("Выражение:"), outputStatement);
 		grid.addRow(3, new Label("Памяти:"), outputMemories);
+		grid.addColumn(2,start, nextCond,nextStat, nextNode, toEnd);
 		GridPane.setHgrow(outputStatement, Priority.ALWAYS);
 		GridPane.setHgrow(outputCondition, Priority.ALWAYS);
 		GridPane.setHgrow(outputNode, Priority.ALWAYS);

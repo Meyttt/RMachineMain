@@ -32,7 +32,7 @@ public class DebuggerRunner {
 		Thread threaddb = new Thread(debugger);
 		threaddb.start();
 
-		Thread.sleep(1000);
+		Thread.sleep(3000);
 
 		threadrm.start();
 

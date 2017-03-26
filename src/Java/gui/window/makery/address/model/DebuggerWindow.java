@@ -116,10 +116,10 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			if(r_machine.currentNumber ==null){
+			if(r_machine.currentNumber.getValue() ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.currentNumber);
+				outputNode.setText(r_machine.currentNumber.getValue());
 			}
 			if(r_machine.getCurrentCondition()==null){
 				outputCondition.setText("null");
@@ -160,10 +160,10 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			if(r_machine.currentNumber ==null){
+			if(r_machine.currentNumber.getValue() ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.currentNumber);
+				outputNode.setText(r_machine.currentNumber.getValue());
 			}
 			if(r_machine.getCurrentCondition()==null){
 				outputCondition.setText("null");
@@ -204,10 +204,10 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			if(r_machine.currentNumber ==null){
+			if(r_machine.currentNumber.getValue() ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.currentNumber);
+				outputNode.setText(r_machine.currentNumber.getValue());
 			}
 			if(r_machine.getCurrentCondition()==null){
 				outputCondition.setText("null");
@@ -251,10 +251,10 @@ public class DebuggerWindow extends Application implements Runnable{
 					e.printStackTrace();
 				}
 			}
-			if(r_machine.currentNumber ==null){
+			if(r_machine.currentNumber.getValue() ==null){
 				outputNode.setText("null");
 			}else {
-				outputNode.setText(r_machine.currentNumber);
+				outputNode.setText(r_machine.currentNumber.getValue());
 			}
 			if(r_machine.getCurrentCondition()==null){
 				outputCondition.setText("null");

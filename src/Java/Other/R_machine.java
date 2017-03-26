@@ -27,7 +27,7 @@ public class R_machine extends Thread implements Runnable{
     private Stage primaryStage;
     private Pane rootLayout;
     private TextArea textArea;
-    public volatile String currentNumber = null;
+    public volatile StringBox currentNumber = new StringBox(null);
 
     public synchronized void setCurrentCondition(Condition currentCondition) {
         this.currentCondition = currentCondition;
@@ -40,7 +40,7 @@ public class R_machine extends Thread implements Runnable{
     }
 
     public synchronized void setCurrentNumber(String currentNumber) {
-        this.currentNumber = currentNumber;
+        this.currentNumber.setValue(currentNumber);
     }
 
     private volatile Statement currenntStatement = null;
@@ -63,7 +63,7 @@ public class R_machine extends Thread implements Runnable{
     }
 
     public synchronized String getCurrentNumber() {
-        return currentNumber;
+        return currentNumber.getValue();
     }
 
 
@@ -109,26 +109,26 @@ public class R_machine extends Thread implements Runnable{
             }
         }
 
-//        if(currentNumber==null){ //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
-//            try {
-//                this.wait();
-//            } catch (InterruptedException e) {
-//
-//            }
-//        }
+        if(currentNumber.getValue()==null){ //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+
+            }
+        }
         this.currenntStatement=null;
         this.currentCondition=null;
         Arm firstArm=null;
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
-        if(currentNumber ==null) {
+        if(currentNumber.getValue() ==null) {
             if (arms.containsKey("0")) {
-                this.setCurrentNumber("0");
+                    this.setCurrentNumber("0");
             } else {
                 System.err.println("Невозможно обработать алгоритм без нулевой вершины");
                 System.exit(-1);
             }
         }
-        firstArm=arms.get(currentNumber);
+        firstArm=arms.get(currentNumber.getValue());
 
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
@@ -246,7 +246,7 @@ public class R_machine extends Thread implements Runnable{
 
                     return;
                 }
-                this.currentNumber =endNumber;
+                this.currentNumber.setValue(endNumber);
                 run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
             }

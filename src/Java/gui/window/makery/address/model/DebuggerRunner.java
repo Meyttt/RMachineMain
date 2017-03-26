@@ -21,6 +21,7 @@ public class DebuggerRunner {
 		Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
 		AllStorage allStorage = new AllStorage(storage,tape);
 		R_machine r_machine = new R_machine(allStorage);
+		//todo: переписать на работу с тредом без машины
 		Thread threadrm = new Thread(r_machine);
 		threadrm.setDaemon(true);
 //		Debugger debugger = new Debugger();
@@ -32,7 +33,7 @@ public class DebuggerRunner {
 		Thread threaddb = new Thread(debugger);
 		threaddb.start();
 
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 
 		threadrm.start();
 

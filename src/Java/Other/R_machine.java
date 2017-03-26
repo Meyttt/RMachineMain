@@ -63,7 +63,8 @@ public class R_machine extends Thread implements Runnable{
     }
 
     public synchronized String getCurrentNumber() {
-        return currentNumber.getValue();
+//        System.out.println(currentNumber.getValue());
+        return this.currentNumber.getValue();
     }
 
 
@@ -102,7 +103,7 @@ public class R_machine extends Thread implements Runnable{
         if (stopType == StopType.NODE){
             try {
                 Thread.sleep(100);
-                System.out.println("R-Machine now waiting in node number: " + this.currentNumber);
+                System.out.println("R-Machine now waiting in node number: " + this.getCurrentNumber());
                 this.wait();
             } catch (InterruptedException e) {
 
@@ -111,6 +112,7 @@ public class R_machine extends Thread implements Runnable{
 
         if(currentNumber.getValue()==null){ //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
             try {
+                System.out.println("current number is null");
                 this.wait();
             } catch (InterruptedException e) {
 
@@ -123,21 +125,26 @@ public class R_machine extends Thread implements Runnable{
         if(currentNumber.getValue() ==null) {
             if (arms.containsKey("0")) {
                     this.setCurrentNumber("0");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.err.println("Невозможно обработать алгоритм без нулевой вершины");
                 System.exit(-1);
             }
         }
         firstArm=arms.get(currentNumber.getValue());
-
         String endNumber =null;
         ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
         for(ArmLine line:lines) {
+            this.currentCondition = line.getCondition();
             if (stopType == StopType.CONDITION){
                 try {
-                    this.currentCondition = line.getCondition();
                     Thread.sleep(100);
                     System.out.println("R-Machine now waiting in condition: " + this.currentCondition);
+                    Thread.sleep(100);
                     this.wait();
                 } catch (InterruptedException e) {
 
@@ -152,7 +159,7 @@ public class R_machine extends Thread implements Runnable{
                             this.currenntStatement = statement;
                             Thread.sleep(100);
                             System.out.println("R machine is now doing:" + statement);
-
+                            Thread.sleep(100);
                             this.wait();
                         } catch (InterruptedException e) {
 
@@ -165,6 +172,11 @@ public class R_machine extends Thread implements Runnable{
                     Set<String> names = this.allStorage.storage.getMemories().keySet();
                     for(String name:names){
                         System.out.println(this.allStorage.storage.getMemories().get(name));
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                     this.interrupt();
                     return;

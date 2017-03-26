@@ -4,7 +4,7 @@ package Other;
  * Created by Admin on 25.03.2017.
  */
 public class StringBox {
-	String value;
+	volatile String value;
 
 	public void setValue(String value) {
 		this.value = value;

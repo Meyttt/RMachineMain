@@ -21,12 +21,11 @@ public class DebuggerRunner {
 		Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
 		AllStorage allStorage = new AllStorage(storage,tape);
 		R_machine r_machine = new R_machine(allStorage);
-		//todo: переписать на работу с тредом без машины
 		r_machine.setDaemon(true);
 //		Debugger debugger = new Debugger();
 //		ExecutorService executorService= Executors.newFixedThreadPool(1);
 //		executorService.execute(debugger);
-
+		//TODO: Зачем мне в конструкторе р_машина? может ее у3брать нахрен?
 		DebuggerWindow debugger = new DebuggerWindow();
 		debugger.setR_machine(r_machine);
 		Thread threaddb = new Thread(debugger);

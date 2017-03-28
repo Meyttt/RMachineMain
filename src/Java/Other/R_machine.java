@@ -27,7 +27,25 @@ public class R_machine extends Thread implements Runnable{
     private Stage primaryStage;
     private Pane rootLayout;
     private TextArea textArea;
+    private WorkExchange workExchange=null;
+    private volatile StopType stopType = null;
     public volatile StringBox currentNumber = new StringBox(null);
+
+    public R_machine(AllStorage allStorage, StringBox currentNumber, Condition currentCondition, Statement currenntStatement) {
+        this.allStorage=allStorage;
+        this.storage=allStorage.getStorage();
+        this.tape=allStorage.getTape();
+        this.currentNumber = currentNumber;
+        this.currentCondition = currentCondition;
+        this.currenntStatement = currenntStatement;
+    }
+
+    public R_machine(AllStorage allStorage, WorkExchange workExchange) {
+        this.allStorage=allStorage;
+        this.storage=allStorage.getStorage();
+        this.tape=allStorage.getTape();
+        this.workExchange = workExchange;
+    }
 
     public synchronized void setCurrentCondition(Condition currentCondition) {
         this.currentCondition = currentCondition;
@@ -48,8 +66,6 @@ public class R_machine extends Thread implements Runnable{
     public synchronized void setStopType(StopType stopType) {
         this.stopType = stopType;
     }
-
-    private volatile StopType stopType = null;
     public synchronized StopType getStopType() {
         return stopType;
     }
@@ -66,25 +82,12 @@ public class R_machine extends Thread implements Runnable{
 //        System.out.println(currentNumber.getValue());
         return this.currentNumber.getValue();
     }
-
-
     public R_machine(AllStorage allStorage) {
         this.allStorage=allStorage;
         this.storage=allStorage.getStorage();
         this.tape=allStorage.getTape();
     }
 
-
-//    public Arm start(){
-//        Set<String> armnumbers = storage.arms.keySet();
-//        Arm firstArm = null;
-//        if(armnumbers.contains("0")){
-//            firstArm=storage.arms.get("0");
-//        }else{
-//            System.err.println("Нет узла с нулевым номером!");
-//        }
-//        return firstArm;
-//    }
 
     public void checkArm(Arm curretArm) {
         ArrayList<ArmLine> lines = curretArm.getLines();
@@ -100,94 +103,84 @@ public class R_machine extends Thread implements Runnable{
      */
 
     public synchronized void run(){
-        if (stopType == StopType.NODE){
+        while(true) {
             try {
-                Thread.sleep(100);
-                System.out.println("R-Machine now waiting in node number: " + this.getCurrentNumber());
-                this.wait();
+                this.stopType = this.workExchange.getWork();
+
             } catch (InterruptedException e) {
-
+                e.printStackTrace();
             }
-        }
-
-        if(currentNumber.getValue()==null){ //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
-            try {
-                System.out.println("current number is null");
-                this.wait();
-            } catch (InterruptedException e) {
-
-            }
-        }
-        this.currenntStatement=null;
-        this.currentCondition=null;
-        Arm firstArm=null;
-        HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
-        if(currentNumber.getValue() ==null) {
-            if (arms.containsKey("0")) {
-                    this.setCurrentNumber("0");
+            if (stopType == StopType.NODE) {
                 try {
-                    Thread.sleep(500);
+                    workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement));
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+
                 }
-            } else {
-                System.err.println("Невозможно обработать алгоритм без нулевой вершины");
-                System.exit(-1);
             }
-        }
-        firstArm=arms.get(currentNumber.getValue());
-        String endNumber =null;
-        ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
-        for(ArmLine line:lines) {
-            this.currentCondition = line.getCondition();
-            if (stopType == StopType.CONDITION){
+            if (currentNumber.getValue() == null) { //стоп до обработки алгоритма, чтобы сначала выбрать первый шаг.
                 try {
-                    Thread.sleep(100);
-                    System.out.println("R-Machine now waiting in condition: " + this.currentCondition);
-                    Thread.sleep(100);
+                    System.out.println("current number is null");
                     this.wait();
                 } catch (InterruptedException e) {
 
                 }
             }
-            if(line.compare(this.tape)){ //Если условие в данном ребре истинно...
-                endNumber=line.getEndArmNumber();
-                setCurrentNumber(line.getEndArmNumber());
-                for(Statement statement:line.getStatements()){ //выполнение всех выражений (операций) , перечисленных в ребре
-                    if(stopType==StopType.STATEMENT) {
-                        try {
-                            this.currenntStatement = statement;
-                            Thread.sleep(100);
-                            System.out.println("R machine is now doing:" + statement);
-                            Thread.sleep(100);
-                            this.wait();
-                        } catch (InterruptedException e) {
-
-                        }
-                    }
-                    statement.doStatement(storage,tape);
-                }
-                char tapeCurrent=this.tape.readCurrent();
-                if(tapeCurrent=='#'){
-                    Set<String> names = this.allStorage.storage.getMemories().keySet();
-                    for(String name:names){
-                        System.out.println(this.allStorage.storage.getMemories().get(name));
-                    }
+            this.currenntStatement = null;
+            this.currentCondition = null;
+            Arm firstArm = null;
+            HashMap<String, Arm> arms = this.allStorage.getStorage().arms;
+            if (currentNumber.getValue() == null) {
+                if (arms.containsKey("0")) {
+                    this.setCurrentNumber("0");
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    this.interrupt();
+                } else {
+                    System.err.println("Невозможно обработать алгоритм без нулевой вершины");
+                    System.exit(-1);
+                }
+            }
+            firstArm = arms.get(currentNumber.getValue());
+            ArrayList<ArmLine> lines = firstArm.getLines();//обход ребер одной вершины ( в данном случае первой, т.е. с номером "0"
+            for (ArmLine line : lines) {
+                this.currentCondition = line.getCondition();
+                if (stopType == StopType.CONDITION) {
+                    try {
+                        workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement));
+                    } catch (InterruptedException e) {
+
+                    }
+                }
+                if (line.compare(this.tape)) { //Если условие в данном ребре истинно...
+                    setCurrentNumber(line.getEndArmNumber());
+                    for (Statement statement : line.getStatements()) { //выполнение всех выражений (операций) , перечисленных в ребре
+                        if (stopType == StopType.STATEMENT) {
+                            try {
+                                workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement));
+                            } catch (InterruptedException e) {
+
+                            }
+                        }
+                        statement.doStatement(storage, tape);
+                    }
+                    char tapeCurrent = this.tape.readCurrent();
+                    if (tapeCurrent == '#') {
+                        Set<String> names = this.allStorage.storage.getMemories().keySet();
+                        for (String name : names) {
+                            System.out.println(this.allStorage.storage.getMemories().get(name));
+                        }
+                        try {
+                            workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement));
+                        } catch (InterruptedException e) {
+                        }
+                        this.interrupt();
+                        return;
+                    }
+                    run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                     return;
                 }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                run(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
-                return;
             }
         }
 

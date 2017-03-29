@@ -20,8 +20,6 @@ import java.util.Set;
  * или не здесь
  * ОБНОВЛЕНИЕ: по замыслу здесь
  */
-
-//TODO: воткнуть внешний раннер для потока, ожидающий извне первую точку останова
 public class R_machine extends Thread implements Runnable{
     AllStorage allStorage;
     Storage storage;
@@ -33,14 +31,16 @@ public class R_machine extends Thread implements Runnable{
     private WorkExchange workExchange=null;
     private volatile StopType stopType = null;
     public volatile StringBox currentNumber = new StringBox(null);
+    private boolean end = false;
 
-    public R_machine(AllStorage allStorage, StringBox currentNumber, Condition currentCondition, Statement currenntStatement) {
+    public R_machine(AllStorage allStorage, StringBox currentNumber, Condition currentCondition, Statement currenntStatement, boolean end) {
         this.allStorage=allStorage;
         this.storage=allStorage.getStorage();
         this.tape=allStorage.getTape();
         this.currentNumber = currentNumber;
         this.currentCondition = currentCondition;
         this.currenntStatement = currenntStatement;
+        this.end = end;
     }
 
     public R_machine(AllStorage allStorage, WorkExchange workExchange) {
@@ -82,7 +82,6 @@ public class R_machine extends Thread implements Runnable{
     }
 
     public synchronized String getCurrentNumber() {
-//        System.out.println(currentNumber.getValue());
         return this.currentNumber.getValue();
     }
     public R_machine(AllStorage allStorage) {
@@ -100,26 +99,21 @@ public class R_machine extends Thread implements Runnable{
             }
         }
     }
-
-    /**
-     * Основной цикл обхода алгортма. Без аргуентов вызывается один аз при запуске Р-машины.
-     */
-    /**
-     * TODO:Выделить основные модули
-     * TODO:
-     * TODO:
-     * TODO:
-     *
-     */
+    public boolean endOfAlgorythm(){
+        return this.end;
+    }
     public void continueWork() throws InterruptedException {
         while(true) {
-            workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement));
+            workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement, this.end));
             this.stopType = this.workExchange.getWork();
             return;
         }
 
     }
-    public  void mainWork(){
+    public  void mainWork() throws InterruptedException {
+        if(this.end){
+            continueWork();
+        }
         this.currenntStatement = null;
         this.currentCondition = null;
         Arm firstArm = null;
@@ -158,6 +152,7 @@ public class R_machine extends Thread implements Runnable{
             if (line.compare(this.tape)) { //Если условие в данном ребре истинно...
                 setCurrentNumber(line.getEndArmNumber());
                 for (Statement statement : line.getStatements()) { //выполнение всех выражений (операций) , перечисленных в ребре
+                    this.setCurrenntStatement(statement);
                     if (stopType == StopType.STATEMENT) {
                         try {
                             continueWork();
@@ -173,13 +168,12 @@ public class R_machine extends Thread implements Runnable{
                     for (String name : names) {
                         System.out.println(this.allStorage.storage.getMemories().get(name));
                     }
+                    this.end=true;
                     try {
-                        workExchange.sendResult(new R_machine(this.allStorage, this.currentNumber, this.currentCondition, this.currenntStatement));
+                        continueWork();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    this.interrupt();
-                    return;
                 }
                 mainWork(); //Если программа продолжается ( т.е. не был указан конец ("#"), переход к обработке узла с номером, указанным в ребре.
                 return;
@@ -199,10 +193,13 @@ public class R_machine extends Thread implements Runnable{
                 break;
             }
         }
-        mainWork();
+        try {
+            mainWork();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
-
     public synchronized void run(TextArea textArea){
         this.textArea = textArea;
         HashMap<String, Arm> arms = this.allStorage.getStorage().arms;

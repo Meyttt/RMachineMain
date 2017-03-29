@@ -116,12 +116,12 @@
 				<edge end = "11">
 					<predicate type="memory">reg3</predicate>
 					<operation>
-						<left value = "42"/>
+						<left value = "11"/>
 						<operator>-&gt;</operator>
 						<right value ="a"/>
 					</operation>
 					<operation>
-						<left value = "24"/>
+						<left value = "33"/>
 						<operator>-&gt;</operator>
 						<right value ="b"/>
 					</operation>

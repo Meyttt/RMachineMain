@@ -2,6 +2,7 @@ package gui.window.makery.address.model;
 
 import Other.R_machine;
 import Other.StopType;
+import Other.Tape;
 import Other.WorkExchange;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -19,20 +20,15 @@ import javafx.stage.Stage;
  * Created by Admin on 18.02.2017.
  */
 public class DebuggerWindow extends Application implements Runnable{
-	static TextField output, outputNode, outputCondition, outputStatement;
+	static TextField outputNode, outputCondition, outputStatement, tapeField;
 	static TextArea outputMemories;
 	static Button nextCond,nextStat,nextNode,toEnd;
 
 	static R_machine r_machine;
 	static WorkExchange workExchange;
 
-	public DebuggerWindow( R_machine r_machine,WorkExchange workExchange) {
-		DebuggerWindow.r_machine=r_machine;
+	public DebuggerWindow(WorkExchange workExchange) {
 		DebuggerWindow.workExchange = workExchange;
-	}
-
-	public DebuggerWindow(R_machine r_machine) {
-		DebuggerWindow.r_machine=r_machine;
 	}
 
 	public DebuggerWindow() {
@@ -49,6 +45,8 @@ public class DebuggerWindow extends Application implements Runnable{
 		outputMemories = new TextArea();
 		outputMemories.setMinHeight(50);
 		outputMemories.setEditable(false);
+		tapeField = new TextField();
+		tapeField.setEditable(false);
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5));
@@ -62,8 +60,10 @@ public class DebuggerWindow extends Application implements Runnable{
 		Button exit = new Button("Выход");
 
 		nextCond.setOnAction(event -> {
+			disableButtons();
 			try {
 				r_machine=workExchange.sendWork(StopType.CONDITION);
+				enableButtons();
 				if(r_machine.endOfAlgorythm()){
 					disableButtons();
 				}
@@ -71,11 +71,14 @@ public class DebuggerWindow extends Application implements Runnable{
 				e.printStackTrace();
 			}
 			setFields();
+
 		});
 
 		nextStat.setOnAction(event -> {
+			disableButtons();
 			try {
 				r_machine=workExchange.sendWork(StopType.STATEMENT);
+				enableButtons();
 				if(r_machine.endOfAlgorythm()){
 					disableButtons();
 				}
@@ -83,12 +86,15 @@ public class DebuggerWindow extends Application implements Runnable{
 				e.printStackTrace();
 			}
 			setFields();
+
 
 		});
 
 		nextNode.setOnAction(event -> {
+			disableButtons();
 			try {
 				this.r_machine=workExchange.sendWork(StopType.NODE);
+				enableButtons();
 				if(r_machine.endOfAlgorythm()){
 					disableButtons();
 				}
@@ -96,11 +102,14 @@ public class DebuggerWindow extends Application implements Runnable{
 				e.printStackTrace();
 			}
 			setFields();
+
 		});
 
 		toEnd.setOnAction(event -> {
+			disableButtons();
 			try {
 				r_machine=workExchange.sendWork(StopType.END);
+				enableButtons();
 				if(r_machine.endOfAlgorythm()){
 					disableButtons();
 				}
@@ -118,6 +127,7 @@ public class DebuggerWindow extends Application implements Runnable{
 		grid.addRow(1, new Label("Условие:"), outputCondition);
 		grid.addRow(2, new Label("Выражение:"), outputStatement);
 		grid.addRow(3, new Label("Памяти:"), outputMemories);
+		grid.addRow(4, new Label("Лента:"), tapeField);
 		grid.addColumn(2, nextCond,nextStat, nextNode, toEnd,exit);
 		GridPane.setHgrow(outputStatement, Priority.ALWAYS);
 		GridPane.setHgrow(outputCondition, Priority.ALWAYS);
@@ -133,6 +143,12 @@ public class DebuggerWindow extends Application implements Runnable{
 		nextStat.setDisable(true);
 		nextNode.setDisable(true);
 		toEnd.setDisable(true);
+	}
+	private static void  enableButtons(){
+		nextCond.setDisable(false);
+		nextStat.setDisable(false);
+		nextNode.setDisable(false);
+		toEnd.setDisable(false);
 	}
 
 	public void setFields(){
@@ -152,9 +168,19 @@ public class DebuggerWindow extends Application implements Runnable{
 		}else {
 			outputStatement.setText(r_machine.getCurrenntStatement().toString());
 		}
+		if(r_machine.getTape()==null){
+			tapeField.setText("null");
+		}else {
+			tapeField.setText(readTape());
+		}
 		outputMemories.setText(r_machine.stringMemories());
 	}
-
+	private String readTape(){
+		Tape tape = r_machine.getTape();
+		String tapeString = tape.toString();
+		int number=tape.counter;
+		return tapeString.substring(0,number)+"["+tapeString.charAt(number)+"]"+tapeString.substring(number+1,tapeString.length());
+	}
 	@Override
 	public void run() {
 		launch(DebuggerWindow.class);

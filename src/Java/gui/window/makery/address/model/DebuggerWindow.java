@@ -25,13 +25,20 @@ public class DebuggerWindow extends Application implements Runnable{
 	static R_machine r_machine;
 	static WorkExchange workExchange;
 
-	public static void setR_machine(R_machine r_machine) {
-		DebuggerWindow.r_machine=r_machine;
-	}
+//	public static void setR_machine(R_machine r_machine) {
+//		DebuggerWindow.r_machine=r_machine;
+//	}
 
 	public DebuggerWindow( R_machine r_machine,WorkExchange workExchange) {
 		DebuggerWindow.r_machine=r_machine;
 		DebuggerWindow.workExchange = workExchange;
+	}
+
+	public DebuggerWindow(R_machine r_machine) {
+		DebuggerWindow.r_machine=r_machine;
+	}
+
+	public DebuggerWindow() {
 	}
 
 	@Override
@@ -55,16 +62,16 @@ public class DebuggerWindow extends Application implements Runnable{
 		Button nextStat = new Button("Следующее выражение");
 		Button nextNode = new Button("Следующая вершина");
 		Button toEnd = new Button("В конец программы");
-		nextCond.setDisable(true);
-		nextStat.setDisable(true);
-		nextNode.setDisable(true);
-		toEnd.setDisable(true);
+//		nextCond.setDisable(true);
+//		nextStat.setDisable(true);
+//		nextNode.setDisable(true);
+//		toEnd.setDisable(true);
 		nextCond.setOnAction(event -> {
-			try {
-				r_machine=workExchange.sendWork(r_machine,StopType.CONDITION);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				r_machine=workExchange.sendWork(StopType.CONDITION);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 			String currentNumber = r_machine.getCurrentNumber();
 			if(currentNumber==null){
 				outputNode.setText("null");
@@ -86,7 +93,7 @@ public class DebuggerWindow extends Application implements Runnable{
 
 		nextStat.setOnAction(event -> {
 			try {
-				r_machine=workExchange.sendWork(r_machine,StopType.STATEMENT);
+				r_machine=workExchange.sendWork(StopType.STATEMENT);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -112,7 +119,7 @@ public class DebuggerWindow extends Application implements Runnable{
 
 		nextNode.setOnAction(event -> {
 			try {
-				r_machine=workExchange.sendWork(r_machine,StopType.NODE);
+				this.r_machine=workExchange.sendWork(StopType.NODE);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -138,7 +145,7 @@ public class DebuggerWindow extends Application implements Runnable{
 
 		toEnd.setOnAction(event -> {
 			try {
-				r_machine=workExchange.sendWork(r_machine,StopType.END);
+				r_machine=workExchange.sendWork(StopType.END);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -169,6 +176,7 @@ public class DebuggerWindow extends Application implements Runnable{
 			toEnd.setDisable(false);
 			System.out.println(r_machine.getState());
 			while(!(r_machine.getState()== Thread.State.WAITING)&&!(r_machine.getState()== Thread.State.TERMINATED)){
+				System.out.println(r_machine.getState());
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -231,6 +239,6 @@ public class DebuggerWindow extends Application implements Runnable{
 
 	@Override
 	public void run() {
-		this.launch(DebuggerWindow.class);
+		launch(DebuggerWindow.class);
 	}
 }

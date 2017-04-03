@@ -23,25 +23,25 @@ public class StarterMain {
     boolean debugType;
     String tape;
 
-    public StarterMain(String filepath, boolean debugType, String tape) throws ParserConfigurationException, SAXException, IOException {
+    public StarterMain(String filepath, boolean debugType, String tape) throws ParserConfigurationException, SAXException, IOException, InterruptedException {
         this.filepath = filepath;
         this.debugType = debugType;
         this.tape = tape;
         start();
     }
 
-    public String start() throws IOException, SAXException, ParserConfigurationException {
+    public String start() throws IOException, SAXException, ParserConfigurationException, InterruptedException {
         AlgorithmReaderNew algorithmReader = new AlgorithmReaderNew(filepath);
         algorithmReader.readMemories();
         algorithmReader.readAlgorithm();
         Storage storage = new Storage(algorithmReader.arms,algorithmReader.memoryHashMap,algorithmReader.alphabetHashMap);
         AllStorage allStorage = new AllStorage(storage,new Tape(tape));
         R_machine r_machine = new R_machine(allStorage);
-        r_machine.run();
+        r_machine.simpleRun();
         return "0";
     }
 
-    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, InterruptedException {
         StarterMain starterMain = new StarterMain("templateStrorageTest.xml",false,"perfectapple#");
     }
 
